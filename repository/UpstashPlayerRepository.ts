@@ -12,6 +12,10 @@ export class UpstashPlayerRepository {
     await set(`PLAYER#${player.id}`, JSON.stringify(player));
   }
 
+  public async update(player: IPlayer) {
+    await set(`PLAYER#${player.id}`, JSON.stringify(player));
+  }
+
   public async listAll() {
     const {
       data: [, keys],
