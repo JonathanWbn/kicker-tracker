@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-function PlayerForm() {
+function PlayerForm({ onCreated }: { onCreated: VoidFunction }) {
   const [name, setName] = useState("");
 
   async function handeSubmit() {
-    await axios.post("/api/player", { name });
+    await axios.post("/api/players", { name });
+    onCreated();
+    setName("");
   }
 
   return (
