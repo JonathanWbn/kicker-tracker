@@ -7,7 +7,7 @@ auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN);
 
 export class UpstashGameRepository {
   public async create(winnerTeam: Team, loserTeam: Team) {
-    const game = new Game(uuid(), winnerTeam, loserTeam);
+    const game = new Game(uuid(), new Date(), winnerTeam, loserTeam);
 
     await set(`GAME#${game.id}`, JSON.stringify(game));
   }
@@ -26,8 +26,10 @@ export class UpstashGameRepository {
     return Promise.all(
       gameIds.map(async (key) => {
         const { data } = await get(key);
-        const { id, winnerTeam, loserTeam } = JSON.parse(data) as IGame;
-        return new Game(id, winnerTeam, loserTeam);
+        const { id, createdAt, winnerTeam, loserTeam } = JSON.parse(
+          data
+        ) as IGame;
+        return new Game(id, new Date(createdAt), winnerTeam, loserTeam);
       })
     );
   }

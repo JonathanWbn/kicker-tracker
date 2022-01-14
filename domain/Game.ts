@@ -8,6 +8,7 @@ export type GameId = string;
 export class Game implements IGame {
   constructor(
     public readonly id: GameId,
+    public readonly createdAt: Date,
     public readonly winnerTeam: Team,
     public readonly loserTeam: Team
   ) {
@@ -19,6 +20,7 @@ export class Game implements IGame {
 
 export interface IGame {
   id: GameId;
+  createdAt: Date;
   winnerTeam: Team;
   loserTeam: Team;
 }

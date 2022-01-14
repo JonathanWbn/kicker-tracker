@@ -7,14 +7,19 @@ import { DataContext } from "../pages";
 
 function GameList() {
   const { games } = useContext(DataContext);
-
+  console.log("games", games);
   return (
     <>
       <h1>Games</h1>
       <ul>
-        {games.map((game) => (
-          <GameItem key={game.id} game={game} />
-        ))}
+        {games
+          .sort(
+            (a, b) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          )
+          .map((game) => (
+            <GameItem key={game.id} game={game} />
+          ))}
       </ul>
     </>
   );
