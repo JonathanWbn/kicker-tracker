@@ -7,9 +7,9 @@ export default async function handler(
 ) {
   const repository = new UpstashGameRepository();
   if (req.method === "POST") {
-    const { player1, player2, winner } = req.body;
+    const { winnerTeam, loserTeam } = req.body;
 
-    await repository.create(player1, player2, winner);
+    await repository.create(winnerTeam, loserTeam);
 
     res.status(201).json({ success: true });
   }

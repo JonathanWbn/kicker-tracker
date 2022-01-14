@@ -6,18 +6,22 @@ import GameForm from "../components/game-form";
 import GameList from "../components/game-list";
 import PlayerForm from "../components/player-form";
 import PlayerList from "../components/player-list";
-import { IGame } from "../domain/Game";
-import { IPlayer } from "../domain/Player";
+import { GameId, IGame } from "../domain/Game";
+import { IPlayer, PlayerId } from "../domain/Player";
 import styles from "../styles/Home.module.css";
 
 export const DataContext = createContext<{
   players: IPlayer[];
   refreshPlayers: VoidFunction;
+  getPlayer: (id: PlayerId) => IPlayer;
   games: IGame[];
   refreshGames: VoidFunction;
 }>({
   players: [],
   refreshPlayers: () => {},
+  getPlayer: () => {
+    throw new Error("No player found.");
+  },
   games: [],
   refreshGames: () => {},
 });
@@ -48,6 +52,10 @@ const Home: NextPage = () => {
           value={{
             players,
             refreshPlayers: fetchPlayers,
+            getPlayer: (id) => {
+              const player = players.find((el) => el.id === id);
+              return player || { id: "", name: "" };
+            },
             games,
             refreshGames: fetchGames,
           }}
