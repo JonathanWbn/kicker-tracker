@@ -19,12 +19,10 @@ export class UpstashGameRepository {
   public async listAll() {
     const {
       data: [, keys],
-    } = await scan(0);
-
-    const gameIds = (keys as string[]).filter((key) => key.startsWith("GAME"));
+    } = await scan(0, "MATCH", "GAME#*", "COUNT", 1000);
 
     return Promise.all(
-      gameIds.map(async (key) => {
+      keys.map(async (key: string) => {
         const { data } = await get(key);
         const { id, createdAt, winnerTeam, loserTeam } = JSON.parse(
           data

@@ -19,14 +19,10 @@ export class UpstashPlayerRepository {
   public async listAll() {
     const {
       data: [, keys],
-    } = await scan(0);
-
-    const playerIds = (keys as string[]).filter((key) =>
-      key.startsWith("PLAYER")
-    );
+    } = await scan(0, "MATCH", "PLAYER#*", "COUNT", 1000);
 
     return Promise.all(
-      playerIds.map(async (key) => {
+      keys.map(async (key: string) => {
         const { data } = await get(key);
         const { id, name } = JSON.parse(data) as IPlayer;
         return new Player(id, name);

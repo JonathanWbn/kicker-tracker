@@ -12,8 +12,8 @@ import { IPlayer, PlayerId } from "../domain/Player";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-  const [players, setPlayers] = useState<IPlayer[]>([]);
-  const [games, setGames] = useState<IGame[]>([]);
+  const [players, setPlayers] = useState<IPlayer[]>();
+  const [games, setGames] = useState<IGame[]>();
 
   useEffect(fetchPlayers, []);
   useEffect(fetchGames, []);
@@ -23,11 +23,18 @@ const Home: NextPage = () => {
   }
 
   function fetchGames() {
-    axios("/api/games").then(({ data }) => setGames(data));
+    axios("/api/games").then(({ data }) =>
+      setGames(
+        data.map((game: IGame) => ({
+          ...game,
+          createdAt: new Date(game.createdAt),
+        }))
+      )
+    );
   }
 
   function getPlayer(id: PlayerId) {
-    const player = players.find((el) => el.id === id);
+    const player = players?.find((el) => el.id === id);
     return player || { id: "", name: "" };
   }
 
@@ -37,22 +44,26 @@ const Home: NextPage = () => {
         <title>Kicker</title>
       </Head>
 
-      <main className={styles.main}>
-        <DataContext.Provider
-          value={{
-            players,
-            refreshPlayers: fetchPlayers,
-            getPlayer,
-            games,
-            refreshGames: fetchGames,
-          }}
-        >
-          <PlayerForm />
-          <PlayerList />
-          <GameForm />
-          <GameList />
-        </DataContext.Provider>
-      </main>
+      {!players || !games ? (
+        "Loading..."
+      ) : (
+        <main className={styles.main}>
+          <DataContext.Provider
+            value={{
+              players,
+              refreshPlayers: fetchPlayers,
+              getPlayer,
+              games,
+              refreshGames: fetchGames,
+            }}
+          >
+            <PlayerForm />
+            <PlayerList />
+            <GameForm />
+            <GameList />
+          </DataContext.Provider>
+        </main>
+      )}
     </div>
   );
 };
