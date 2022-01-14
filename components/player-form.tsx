@@ -1,5 +1,6 @@
 import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
+
 import { DataContext } from "../pages";
 
 function PlayerForm() {
@@ -15,7 +16,7 @@ function PlayerForm() {
 
   return (
     <>
-      <h2>Player Form</h2>
+      <h1>Add Player</h1>
       <form>
         <label>
           Name

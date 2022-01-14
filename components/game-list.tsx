@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext } from "react";
+
 import { IGame } from "../domain/Game";
-import { IPlayer } from "../domain/Player";
+import { PlayerId } from "../domain/Player";
 import { DataContext } from "../pages";
-import EditPlayer from "./edit-player";
 
 function GameList() {
   const { games } = useContext(DataContext);
@@ -20,23 +20,25 @@ function GameList() {
   );
 }
 
-function GameItem({ game }: { game: IGame }) {
-  const { refreshGames, players, getPlayer } = useContext(DataContext);
+function GameItem({ game: { id, winnerTeam, loserTeam } }: { game: IGame }) {
+  const { refreshGames, getPlayer } = useContext(DataContext);
 
   async function handleDelete() {
-    await axios.delete(`/api/games/${game.id}`);
+    await axios.delete(`/api/games/${id}`);
     refreshGames();
   }
 
   return (
-    <li key={game.id}>
-      <strong>
-        {game.winnerTeam.map((id) => getPlayer(id).name).join(", ")}
-      </strong>{" "}
-      - {game.loserTeam.map((id) => getPlayer(id).name).join(", ")}
+    <li key={id}>
+      <strong>{winnerTeam.map(getPlayerName).join(", ")}</strong> -{" "}
+      {loserTeam.map(getPlayerName).join(", ")}
       <button onClick={handleDelete}>Delete</button>
     </li>
   );
+
+  function getPlayerName(id: PlayerId) {
+    return getPlayer(id).name;
+  }
 }
 
 export default GameList;

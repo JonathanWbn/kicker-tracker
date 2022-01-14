@@ -1,5 +1,6 @@
-import { MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
+
 import { DataContext } from "../pages";
 import { Team } from "../domain/Game";
 
@@ -9,11 +10,12 @@ function GameForm() {
   const [[loser1, loser2], setLoserTeam] = useState<Team>(["", ""]);
 
   async function handeSubmit(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+
     if (!winner1 || !winner2 || !loser1 || !loser2) {
       return;
     }
 
-    e.preventDefault();
     await axios.post("/api/games", {
       winnerTeam: [winner1, winner2],
       loserTeam: [loser1, loser2],
@@ -25,9 +27,9 @@ function GameForm() {
 
   return (
     <>
-      <h2>Game Form</h2>
+      <h1>Add Game</h1>
       <form>
-        <h4>Winner Team</h4>
+        <h2>Winner Team</h2>
         <label>
           Player 1
           <select
@@ -56,7 +58,7 @@ function GameForm() {
             ))}
           </select>
         </label>
-        <h4>Loser Team</h4>
+        <h2>Loser Team</h2>
         <label>
           Player 1
           <select

@@ -2,29 +2,14 @@ import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { createContext, useEffect, useState } from "react";
+
 import GameForm from "../components/game-form";
 import GameList from "../components/game-list";
 import PlayerForm from "../components/player-form";
 import PlayerList from "../components/player-list";
-import { GameId, IGame } from "../domain/Game";
+import { IGame } from "../domain/Game";
 import { IPlayer, PlayerId } from "../domain/Player";
 import styles from "../styles/Home.module.css";
-
-export const DataContext = createContext<{
-  players: IPlayer[];
-  refreshPlayers: VoidFunction;
-  getPlayer: (id: PlayerId) => IPlayer;
-  games: IGame[];
-  refreshGames: VoidFunction;
-}>({
-  players: [],
-  refreshPlayers: () => {},
-  getPlayer: () => {
-    throw new Error("No player found.");
-  },
-  games: [],
-  refreshGames: () => {},
-});
 
 const Home: NextPage = () => {
   const [players, setPlayers] = useState<IPlayer[]>([]);
@@ -41,6 +26,11 @@ const Home: NextPage = () => {
     axios("/api/games").then(({ data }) => setGames(data));
   }
 
+  function getPlayer(id: PlayerId) {
+    const player = players.find((el) => el.id === id);
+    return player || { id: "", name: "" };
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -52,10 +42,7 @@ const Home: NextPage = () => {
           value={{
             players,
             refreshPlayers: fetchPlayers,
-            getPlayer: (id) => {
-              const player = players.find((el) => el.id === id);
-              return player || { id: "", name: "" };
-            },
+            getPlayer,
             games,
             refreshGames: fetchGames,
           }}
@@ -69,5 +56,21 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export const DataContext = createContext<{
+  players: IPlayer[];
+  refreshPlayers: VoidFunction;
+  getPlayer: (id: PlayerId) => IPlayer;
+  games: IGame[];
+  refreshGames: VoidFunction;
+}>({
+  players: [],
+  refreshPlayers: () => {},
+  getPlayer: () => {
+    throw new Error("No player found.");
+  },
+  games: [],
+  refreshGames: () => {},
+});
 
 export default Home;

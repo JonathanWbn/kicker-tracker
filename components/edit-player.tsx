@@ -1,5 +1,6 @@
 import axios from "axios";
 import { MouseEvent, useState } from "react";
+
 import { IPlayer } from "../domain/Player";
 
 function EditPlayer({
@@ -29,7 +30,7 @@ function EditPlayer({
       <button type="button" onClick={onCancel}>
         Cancel
       </button>
-      <button onClick={handeSubmit}>Submit</button>
+      <button onClick={handeSubmit}>Save</button>
     </form>
   );
 }
