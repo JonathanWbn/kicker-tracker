@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
 import { IPlayer } from "../domain/Player";
-import { PlayerContext } from "../pages";
+import { DataContext } from "../pages";
 import EditPlayer from "./edit-player";
 
 function PlayerList() {
-  const { players } = useContext(PlayerContext);
+  const { players } = useContext(DataContext);
 
   return (
     <>
@@ -19,7 +19,7 @@ function PlayerList() {
 }
 
 function PlayerItem({ player }: { player: IPlayer }) {
-  const { refresh } = useContext(PlayerContext);
+  const { refreshPlayers } = useContext(DataContext);
   const [isEdit, setIsEdit] = useState(false);
 
   return (
@@ -28,7 +28,7 @@ function PlayerItem({ player }: { player: IPlayer }) {
         <EditPlayer
           initial={player}
           onUpdated={() => {
-            refresh();
+            refreshPlayers();
             setIsEdit(false);
           }}
           onCancel={() => setIsEdit(false)}

@@ -2,23 +2,39 @@ import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { createContext, useEffect, useState } from "react";
+import GameForm from "../components/game-form";
+import GameList from "../components/game-list";
 import PlayerForm from "../components/player-form";
 import PlayerList from "../components/player-list";
+import { IGame } from "../domain/Game";
 import { IPlayer } from "../domain/Player";
 import styles from "../styles/Home.module.css";
 
-export const PlayerContext = createContext<{
+export const DataContext = createContext<{
   players: IPlayer[];
-  refresh: VoidFunction;
-}>({ players: [], refresh: () => {} });
+  refreshPlayers: VoidFunction;
+  games: IGame[];
+  refreshGames: VoidFunction;
+}>({
+  players: [],
+  refreshPlayers: () => {},
+  games: [],
+  refreshGames: () => {},
+});
 
 const Home: NextPage = () => {
   const [players, setPlayers] = useState<IPlayer[]>([]);
+  const [games, setGames] = useState<IGame[]>([]);
 
   useEffect(fetchPlayers, []);
+  useEffect(fetchGames, []);
 
   function fetchPlayers() {
     axios("/api/players").then(({ data }) => setPlayers(data));
+  }
+
+  function fetchGames() {
+    axios("/api/games").then(({ data }) => setGames(data));
   }
 
   return (
@@ -28,10 +44,19 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <PlayerContext.Provider value={{ players, refresh: fetchPlayers }}>
+        <DataContext.Provider
+          value={{
+            players,
+            refreshPlayers: fetchPlayers,
+            games,
+            refreshGames: fetchGames,
+          }}
+        >
           <PlayerForm />
           <PlayerList />
-        </PlayerContext.Provider>
+          <GameForm />
+          <GameList />
+        </DataContext.Provider>
       </main>
     </div>
   );

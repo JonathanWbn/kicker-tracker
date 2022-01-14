@@ -1,15 +1,15 @@
 import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
-import { PlayerContext } from "../pages";
+import { DataContext } from "../pages";
 
 function PlayerForm() {
-  const { refresh } = useContext(PlayerContext);
+  const { refreshPlayers } = useContext(DataContext);
   const [name, setName] = useState("");
 
   async function handeSubmit(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     await axios.post("/api/players", { name });
-    refresh();
+    refreshPlayers();
     setName("");
   }
 
