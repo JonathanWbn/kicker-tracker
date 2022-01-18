@@ -1,13 +1,13 @@
 import { auth, set, scan, get } from "@upstash/redis";
 import { v4 as uuid } from "uuid";
 
-import { IPlayer, Player } from "../domain/Player";
+import { IPlayer, Player, PlayerAnimal } from "../domain/Player";
 
 auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN);
 
 export class UpstashPlayerRepository {
-  public async create(name: string) {
-    const player = new Player(uuid(), name);
+  public async create(name: string, animal: PlayerAnimal) {
+    const player = new Player(uuid(), name, animal);
 
     await set(`PLAYER#${player.id}`, JSON.stringify(player));
   }
@@ -24,8 +24,8 @@ export class UpstashPlayerRepository {
     return Promise.all(
       keys.map(async (key: string) => {
         const { data } = await get(key);
-        const { id, name } = JSON.parse(data) as IPlayer;
-        return new Player(id, name);
+        const { id, name, animal } = JSON.parse(data) as IPlayer;
+        return new Player(id, name, animal);
       })
     );
   }

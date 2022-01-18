@@ -1,7 +1,7 @@
 import axios from "axios";
 import { MouseEvent, useState } from "react";
 
-import { IPlayer } from "../domain/Player";
+import { animals, IPlayer, PlayerAnimal } from "../domain/Player";
 
 function EditPlayer({
   initial,
@@ -13,10 +13,11 @@ function EditPlayer({
   onCancel: VoidFunction;
 }) {
   const [name, setName] = useState(initial.name);
+  const [animal, setAnimal] = useState<PlayerAnimal>(initial.animal);
 
   async function handeSubmit(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    await axios.post(`/api/players/${initial.id}`, { name });
+    await axios.post(`/api/players/${initial.id}`, { name, animal });
     onUpdated();
   }
 
@@ -27,6 +28,16 @@ function EditPlayer({
         value={name}
         onChange={(e) => setName(e.target.value)}
       ></input>
+      <select
+        value={animal}
+        onChange={(e) => setAnimal(e.target.value as PlayerAnimal)}
+      >
+        {animals.map((animal) => (
+          <option key={animal} value={animal}>
+            {animal}
+          </option>
+        ))}
+      </select>
       <button type="button" onClick={onCancel}>
         Cancel
       </button>

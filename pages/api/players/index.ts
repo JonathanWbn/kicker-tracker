@@ -7,9 +7,9 @@ export default async function handler(
 ) {
   const repository = new UpstashPlayerRepository();
   if (req.method === "POST") {
-    const { name } = req.body;
+    const { name, animal } = req.body;
 
-    await repository.create(name);
+    await repository.create(name, animal);
 
     res.status(201).json({ success: true });
   }

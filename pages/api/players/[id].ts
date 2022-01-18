@@ -7,10 +7,10 @@ export default async function handler(
 ) {
   const repository = new UpstashPlayerRepository();
   if (req.method === "POST") {
-    const { name } = req.body;
+    const { name, animal } = req.body;
     const { id } = req.query as { id: string };
 
-    await repository.update({ id, name });
+    await repository.update({ id, name, animal });
 
     res.status(201).json({ success: true });
   }
