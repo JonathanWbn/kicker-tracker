@@ -9,7 +9,6 @@ import PlayerForm from "../components/player-form";
 import PlayerList from "../components/player-list";
 import { IGame } from "../domain/Game";
 import { IPlayer, PlayerId } from "../domain/Player";
-import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   const [players, setPlayers] = useState<IPlayer[]>();
@@ -39,7 +38,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Kicker</title>
       </Head>
@@ -47,7 +46,7 @@ const Home: NextPage = () => {
       {!players || !games ? (
         "Loading..."
       ) : (
-        <main className={styles.main}>
+        <main>
           <DataContext.Provider
             value={{
               players,
