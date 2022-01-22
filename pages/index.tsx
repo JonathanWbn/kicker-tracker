@@ -3,9 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { createContext, useEffect, useState } from "react";
 
-import GameForm from "../components/game-form";
 import GameList from "../components/game-list";
-import PlayerForm from "../components/player-form";
 import PlayerList from "../components/player-list";
 import { IGame } from "../domain/Game";
 import { IPlayer, PlayerId } from "../domain/Player";
@@ -13,6 +11,7 @@ import { IPlayer, PlayerId } from "../domain/Player";
 const Home: NextPage = () => {
   const [players, setPlayers] = useState<IPlayer[]>();
   const [games, setGames] = useState<IGame[]>();
+  const [tab, setTab] = useState<"games" | "players">("games");
 
   useEffect(fetchPlayers, []);
   useEffect(fetchGames, []);
@@ -38,7 +37,7 @@ const Home: NextPage = () => {
   }
 
   return (
-    <div>
+    <div className="bg-slate-800 px-5 pb-5 text-slate-200 min-h-screen">
       <Head>
         <title>Kicker</title>
       </Head>
@@ -47,6 +46,24 @@ const Home: NextPage = () => {
         "Loading..."
       ) : (
         <main>
+          <div className="flex py-3 justify-around">
+            <button
+              className={`text-lg ${
+                tab === "games" ? "font-bold border-b" : ""
+              }`}
+              onClick={() => setTab("games")}
+            >
+              Games
+            </button>
+            <button
+              className={`text-lg ${
+                tab === "players" ? "font-bold border-b" : ""
+              }`}
+              onClick={() => setTab("players")}
+            >
+              Leaderbarod
+            </button>
+          </div>
           <DataContext.Provider
             value={{
               players,
@@ -56,10 +73,8 @@ const Home: NextPage = () => {
               refreshGames: fetchGames,
             }}
           >
-            <PlayerForm />
-            <PlayerList />
-            <GameForm />
-            <GameList />
+            {tab === "games" && <GameList />}
+            {tab === "players" && <PlayerList />}
           </DataContext.Provider>
         </main>
       )}

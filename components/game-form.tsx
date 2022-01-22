@@ -3,16 +3,24 @@ import axios from "axios";
 
 import { DataContext } from "../pages";
 import { Team } from "../domain/Game";
+import Image from "next/image";
+import { PlayerId } from "../domain/Player";
+import { uniq } from "lodash";
 
 function GameForm() {
-  const { refreshGames, players } = useContext(DataContext);
-  const [[winner1, winner2], setWinnerTeam] = useState<Team>(["", ""]);
-  const [[loser1, loser2], setLoserTeam] = useState<Team>(["", ""]);
+  const { refreshGames, players, getPlayer } = useContext(DataContext);
+  const [isAdding, setIsAdding] = useState(false);
+  const [winnerTeam, setWinnerTeam] = useState<Team>(["", ""]);
+  const [loserTeam, setLoserTeam] = useState<Team>(["", ""]);
+
+  const [winner1, winner2] = winnerTeam;
+  const [loser1, loser2] = loserTeam;
+
+  const isComplete =
+    uniq([...winnerTeam, ...loserTeam].filter(Boolean)).length === 4;
 
   async function handeSubmit(e: MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-
-    if (!winner1 || !winner2 || !loser1 || !loser2) {
+    if (!isComplete) {
       return;
     }
 
@@ -23,73 +31,127 @@ function GameForm() {
     refreshGames();
     setLoserTeam(["", ""]);
     setWinnerTeam(["", ""]);
+    setIsAdding(false);
+  }
+
+  function handleWinnerSelect(playerId: PlayerId) {
+    if (winnerTeam.includes(playerId)) {
+      setWinnerTeam([
+        winner1 === playerId ? "" : winner1,
+        winner2 === playerId ? "" : winner2,
+      ]);
+    } else if (winner1 && winner2) {
+      return;
+    } else if (winner1) {
+      setWinnerTeam([winner1, playerId]);
+    } else {
+      setWinnerTeam([playerId, ""]);
+    }
+  }
+
+  function handleLoserSelect(playerId: PlayerId) {
+    if (loserTeam.includes(playerId)) {
+      setLoserTeam([
+        loser1 === playerId ? "" : loser1,
+        loser2 === playerId ? "" : loser2,
+      ]);
+    } else if (loser1 && loser2) {
+      return;
+    } else if (loser1) {
+      setLoserTeam([loser1, playerId]);
+    } else {
+      setLoserTeam([playerId, loser2]);
+    }
   }
 
   return (
-    <>
-      <h1>Add Game</h1>
-      <form>
-        <h2>Winner Team</h2>
-        <label>
-          Player 1
-          <select
-            value={winner1}
-            onChange={(e) => setWinnerTeam([e.target.value, winner2])}
-          >
-            <option value="">---</option>
+    <div
+      className={`${
+        isAdding ? "bg-slate-600" : "bg-slate-700"
+      } rounded-2xl p-4 text-slate-100`}
+      onClick={() => !isAdding && setIsAdding(true)}
+    >
+      {isAdding ? (
+        <>
+          <p>
+            <strong>Winner Team</strong>:{" "}
+            {getPlayer(winner1).name || <i>select</i>},{" "}
+            {getPlayer(winner2).name || <i>select</i>}
+          </p>
+          <div className="flex flex-wrap items-center justify-center">
             {players.map((player) => (
-              <option key={player.id} value={player.id}>
-                {player.name}
-              </option>
+              <div
+                key={player.id}
+                className={`m-1 p-1 flex flex-col items-center rounded-lg border-2 ${
+                  winnerTeam.includes(player.id)
+                    ? "border-slate-300"
+                    : "border-transparent"
+                }`}
+                onClick={() => handleWinnerSelect(player.id)}
+              >
+                <Image
+                  src={`/animals/${player.animal}.png`}
+                  alt={player.animal}
+                  width={32}
+                  height={32}
+                />
+              </div>
             ))}
-          </select>
-        </label>
-        <label>
-          Player 2
-          <select
-            value={winner2}
-            onChange={(e) => setWinnerTeam([winner1, e.target.value])}
-          >
-            <option value="">---</option>
+          </div>
+          <p className="mt-2">
+            <strong>Loser Team</strong>:{" "}
+            {getPlayer(loser1).name || <i>select</i>},{" "}
+            {getPlayer(loser2).name || <i>select</i>}
+          </p>
+          <div className="flex flex-wrap items-center justify-center">
             {players.map((player) => (
-              <option key={player.id} value={player.id}>
-                {player.name}
-              </option>
+              <div
+                key={player.id}
+                className={`m-1 p-1 flex flex-col items-center rounded-lg border-2 ${
+                  loserTeam.includes(player.id)
+                    ? "border-slate-300"
+                    : "border-transparent"
+                } ${
+                  loserTeam.includes(player.id) &&
+                  winnerTeam.includes(player.id)
+                    ? "border-red-400"
+                    : ""
+                }`}
+                onClick={() => handleLoserSelect(player.id)}
+              >
+                <Image
+                  className="border"
+                  src={`/animals/${player.animal}.png`}
+                  alt={player.animal}
+                  width={32}
+                  height={32}
+                />
+              </div>
             ))}
-          </select>
-        </label>
-        <h2>Loser Team</h2>
-        <label>
-          Player 1
-          <select
-            value={loser1}
-            onChange={(e) => setLoserTeam([e.target.value, loser2])}
-          >
-            <option value="">---</option>
-            {players.map((player) => (
-              <option key={player.id} value={player.id}>
-                {player.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Player 2
-          <select
-            value={loser2}
-            onChange={(e) => setLoserTeam([loser1, e.target.value])}
-          >
-            <option value="">---</option>
-            {players.map((player) => (
-              <option key={player.id} value={player.id}>
-                {player.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button onClick={handeSubmit}>Submit</button>
-      </form>
-    </>
+          </div>
+          <div className="flex justify-between mt-4">
+            <button
+              className="text-xs rounded px-4 py-2 bg-slate-700"
+              onClick={() => {
+                setIsAdding(false);
+                setWinnerTeam(["", ""]);
+                setLoserTeam(["", ""]);
+              }}
+            >
+              CANCEL
+            </button>
+            <button
+              className="text-xs rounded px-4 py-2 bg-green-700"
+              onClick={handeSubmit}
+            >
+              CREATE
+            </button>
+          </div>
+        </>
+      ) : (
+        <p className="text-center text-lg">+</p>
+      )}
+    </div>
   );
 }
 

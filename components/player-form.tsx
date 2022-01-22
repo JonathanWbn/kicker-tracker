@@ -3,44 +3,82 @@ import axios from "axios";
 
 import { DataContext } from "../pages";
 import { animals, PlayerAnimal } from "../domain/Player";
+import Image from "next/image";
+import { upperCase, upperFirst } from "lodash";
 
 function PlayerForm() {
-  const { refreshPlayers } = useContext(DataContext);
+  const { refreshPlayers, players } = useContext(DataContext);
+  const [isAdding, setIsAdding] = useState(false);
   const [name, setName] = useState("");
   const [animal, setAnimal] = useState<PlayerAnimal | "">("");
 
   async function handeSubmit(e: MouseEvent<HTMLButtonElement>) {
+    if (!animal || !name) {
+      return;
+    }
+
     e.preventDefault();
     await axios.post("/api/players", { name, animal });
     refreshPlayers();
     setName("");
+    setIsAdding(false);
   }
 
   return (
-    <>
-      <h1>Add Player</h1>
-      <form>
-        <label>
-          Name
-          <input value={name} onChange={(e) => setName(e.target.value)}></input>
-        </label>
-        <label>
-          Animal
-          <select
-            value={animal}
-            onChange={(e) => setAnimal(e.target.value as PlayerAnimal)}
-          >
-            <option value="">---</option>
-            {animals.map((animal) => (
-              <option key={animal} value={animal}>
-                {animal}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button onClick={handeSubmit}>Submit</button>
-      </form>
-    </>
+    <div
+      className={`${
+        isAdding ? "bg-slate-600" : "bg-slate-700"
+      } rounded-2xl p-4 text-slate-100 mt-2 flex flex-col`}
+      onClick={() => !isAdding && setIsAdding(true)}
+    >
+      {isAdding ? (
+        <>
+          <input
+            className="rounded bg-slate-700 px-2 py-1 mb-2"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          ></input>
+          <div className="flex flex-wrap items-center justify-center">
+            {animals
+              .filter(
+                (el) => !players.map((player) => player.animal).includes(el)
+              )
+              .map((el) => (
+                <div
+                  key={el}
+                  className={`p-1 flex flex-col items-center rounded-lg border-2 ${
+                    el === animal ? "border-slate-300" : "border-transparent"
+                  }`}
+                  onClick={() => setAnimal(el)}
+                >
+                  <Image
+                    src={`/animals/${el}.png`}
+                    alt={el}
+                    width={28}
+                    height={28}
+                  />
+                </div>
+              ))}
+          </div>
+          <div className="flex justify-between items-center mt-2">
+            {animal ? (
+              <p className="text-sm text-right">{upperFirst(animal)}</p>
+            ) : (
+              <span />
+            )}
+            <button
+              className="text-xs rounded px-4 py-2 bg-green-700"
+              onClick={handeSubmit}
+            >
+              CREATE
+            </button>
+          </div>
+        </>
+      ) : (
+        <p className="text-center text-lg">+</p>
+      )}
+    </div>
   );
 }
 
