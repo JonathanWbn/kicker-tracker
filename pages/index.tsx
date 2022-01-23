@@ -7,10 +7,17 @@ import GameList from "../components/game-list";
 import PlayerList from "../components/player-list";
 import { IGame } from "../domain/Game";
 import { IPlayer, PlayerId } from "../domain/Player";
+import { UpstashGameRepository } from "../repository/UpstashGameRepository";
+import { UpstashPlayerRepository } from "../repository/UpstashPlayerRepository";
 
-const Home: NextPage = () => {
-  const [players, setPlayers] = useState<IPlayer[]>();
-  const [games, setGames] = useState<IGame[]>();
+const Home: NextPage<{ players: string; games: string }> = (props) => {
+  const [players, setPlayers] = useState<IPlayer[]>(JSON.parse(props.players));
+  const [games, setGames] = useState<IGame[]>(
+    JSON.parse(props.games).map((game: any) => ({
+      ...game,
+      createdAt: new Date(game.createdAt),
+    }))
+  );
   const [tab, setTab] = useState<"games" | "players">("games");
 
   useEffect(fetchPlayers, []);
@@ -42,42 +49,36 @@ const Home: NextPage = () => {
         <title>Kicker</title>
       </Head>
 
-      {!players || !games ? (
-        "Loading..."
-      ) : (
-        <main>
-          <div className="flex py-3 justify-around">
-            <button
-              className={`text-lg ${
-                tab === "games" ? "font-bold border-b" : ""
-              }`}
-              onClick={() => setTab("games")}
-            >
-              Games
-            </button>
-            <button
-              className={`text-lg ${
-                tab === "players" ? "font-bold border-b" : ""
-              }`}
-              onClick={() => setTab("players")}
-            >
-              Leaderbarod
-            </button>
-          </div>
-          <DataContext.Provider
-            value={{
-              players,
-              refreshPlayers: fetchPlayers,
-              getPlayer,
-              games,
-              refreshGames: fetchGames,
-            }}
+      <main>
+        <div className="flex py-3 justify-around">
+          <button
+            className={`text-lg ${tab === "games" ? "font-bold border-b" : ""}`}
+            onClick={() => setTab("games")}
           >
-            {tab === "games" && <GameList />}
-            {tab === "players" && <PlayerList />}
-          </DataContext.Provider>
-        </main>
-      )}
+            Games
+          </button>
+          <button
+            className={`text-lg ${
+              tab === "players" ? "font-bold border-b" : ""
+            }`}
+            onClick={() => setTab("players")}
+          >
+            Leaderbarod
+          </button>
+        </div>
+        <DataContext.Provider
+          value={{
+            players,
+            refreshPlayers: fetchPlayers,
+            getPlayer,
+            games,
+            refreshGames: fetchGames,
+          }}
+        >
+          {tab === "games" && <GameList />}
+          {tab === "players" && <PlayerList />}
+        </DataContext.Provider>
+      </main>
     </div>
   );
 };
@@ -97,5 +98,22 @@ export const DataContext = createContext<{
   games: [],
   refreshGames: () => {},
 });
+
+export async function getServerSideProps() {
+  const gameRepository = new UpstashGameRepository();
+  const playerRepository = new UpstashPlayerRepository();
+
+  const [games, players] = await Promise.all([
+    gameRepository.listAll(),
+    playerRepository.listAll(),
+  ]);
+
+  return {
+    props: {
+      games: JSON.stringify(games),
+      players: JSON.stringify(players),
+    },
+  };
+}
 
 export default Home;
