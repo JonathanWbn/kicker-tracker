@@ -4,7 +4,7 @@ import axios from "axios";
 import { DataContext } from "../pages";
 import { animals, PlayerAnimal } from "../domain/Player";
 import Image from "next/image";
-import { upperCase, upperFirst } from "lodash";
+import { upperFirst } from "lodash";
 
 function PlayerForm() {
   const { refreshPlayers, players } = useContext(DataContext);

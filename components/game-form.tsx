@@ -45,7 +45,7 @@ function GameForm() {
     } else if (winner1) {
       setWinnerTeam([winner1, playerId]);
     } else {
-      setWinnerTeam([playerId, ""]);
+      setWinnerTeam([playerId, winner2]);
     }
   }
 
