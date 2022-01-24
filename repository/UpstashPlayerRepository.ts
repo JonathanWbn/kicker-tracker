@@ -1,4 +1,4 @@
-import { auth, set, scan, get } from "@upstash/redis";
+import { auth, set, scan, get, del } from "@upstash/redis";
 import { v4 as uuid } from "uuid";
 
 import { IPlayer, Player, PlayerAnimal } from "../domain/Player";
@@ -14,6 +14,10 @@ export class UpstashPlayerRepository {
 
   public async update(player: IPlayer) {
     await set(`PLAYER#${player.id}`, JSON.stringify(player));
+  }
+
+  public async delete(playerId: IPlayer["id"]) {
+    await del(`PLAYER#${playerId}`);
   }
 
   public async listAll() {

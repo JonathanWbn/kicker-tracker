@@ -1,4 +1,3 @@
-import axios from "axios";
 import Image from "next/image";
 import { useContext } from "react";
 import { format } from "date-fns";
@@ -29,13 +28,7 @@ function GameItem({
 }: {
   game: IGame;
 }) {
-  const { refreshGames, getPlayer } = useContext(DataContext);
-
-  // TODO: add button for deletion
-  async function handleDelete() {
-    await axios.delete(`/api/games/${id}`);
-    refreshGames();
-  }
+  const { getPlayer } = useContext(DataContext);
 
   const [winner1, winner2] = winnerTeam.map(getPlayer);
   const [loser1, loser2] = loserTeam.map(getPlayer);

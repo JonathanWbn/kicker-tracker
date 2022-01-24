@@ -14,5 +14,12 @@ export default async function handler(
 
     res.status(201).json({ success: true });
   }
+  if (req.method === "DELETE") {
+    const { id } = req.query as { id: string };
+
+    await repository.delete(id);
+
+    res.status(201).json({ success: true });
+  }
   res.status(500);
 }

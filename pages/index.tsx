@@ -44,12 +44,12 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
   }
 
   return (
-    <div className="bg-slate-800 px-5 pb-5 text-slate-200 min-h-screen">
+    <div className="bg-slate-800 px-5 pb-5 text-slate-200 min-h-screen flex flex-col items-center">
       <Head>
-        <title>Kicker</title>
+        <title>Thanks For Playing</title>
       </Head>
 
-      <main>
+      <main className="max-w-3xl w-screen">
         <div className="flex py-3 justify-around">
           <button
             className={`text-lg ${tab === "games" ? "font-bold border-b" : ""}`}
@@ -63,7 +63,7 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
             }`}
             onClick={() => setTab("players")}
           >
-            Leaderbarod
+            Leaderboard
           </button>
         </div>
         <DataContext.Provider
