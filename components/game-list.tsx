@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { IGame } from "../domain/Game";
 import { DataContext } from "../pages";
 import GameForm from "./game-form";
+import Button from "./button";
 
 function GameList() {
   const { games } = useContext(DataContext);
@@ -47,20 +48,12 @@ function GameItem({
     >
       {isDeletion ? (
         <div className="flex justify-around">
-          <button
-            className="text-xs px-4 py-2"
-            onClick={() => {
-              setIsDeletion(false);
-            }}
-          >
-            CANCEL
-          </button>
-          <button
-            className="text-xs rounded px-4 py-2 bg-red-700"
+          <Button onClick={() => setIsDeletion(false)} label="cancel" />
+          <Button
+            className="bg-red-700"
             onClick={handleDelete}
-          >
-            DELETE
-          </button>
+            label="delete"
+          />
         </div>
       ) : (
         <>

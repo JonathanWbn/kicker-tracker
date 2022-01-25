@@ -6,6 +6,7 @@ import { DataContext } from "../pages";
 import PlayerForm from "./player-form";
 import axios from "axios";
 import { animals } from "../domain/Player";
+import Button from "./button";
 
 function PlayerList() {
   const { players, games } = useContext(DataContext);
@@ -80,7 +81,7 @@ function PlayerItem({ player, rank }: { player: RatedPlayer; rank: number }) {
                 </div>
               ))}
           </div>
-          <button onClick={handleSave}>Save</button>
+          <Button onClick={handleSave} label="Save" />
         </div>
       ) : (
         <>
@@ -101,7 +102,7 @@ function PlayerItem({ player, rank }: { player: RatedPlayer; rank: number }) {
                 value={values.name}
                 onChange={(e) => setValues({ ...values, name: e.target.value })}
               ></input>
-              <button onClick={handleSave}>Save</button>
+              <Button onClick={handleSave} label="Save" className="px-1 py-0" />
             </div>
           ) : (
             <>

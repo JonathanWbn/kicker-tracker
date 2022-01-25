@@ -5,6 +5,7 @@ import { DataContext } from "../pages";
 import { animals, PlayerAnimal } from "../domain/Player";
 import Image from "next/image";
 import { upperFirst } from "lodash";
+import Button from "./button";
 
 function PlayerForm() {
   const { refreshPlayers, players } = useContext(DataContext);
@@ -67,12 +68,11 @@ function PlayerForm() {
             ) : (
               <span />
             )}
-            <button
-              className="text-xs rounded px-4 py-2 bg-green-700"
+            <Button
+              className="bg-green-700"
               onClick={handeSubmit}
-            >
-              CREATE
-            </button>
+              label="create"
+            />
           </div>
         </>
       ) : (

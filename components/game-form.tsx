@@ -6,6 +6,7 @@ import { Team } from "../domain/Game";
 import Image from "next/image";
 import { PlayerId } from "../domain/Player";
 import { uniq } from "lodash";
+import Button from "./button";
 
 function GameForm() {
   const { refreshGames, players, getPlayer } = useContext(DataContext);
@@ -130,22 +131,19 @@ function GameForm() {
             ))}
           </div>
           <div className="flex justify-between mt-4">
-            <button
-              className="text-xs rounded px-4 py-2 bg-slate-700"
+            <Button
               onClick={() => {
                 setIsAdding(false);
                 setWinnerTeam(["", ""]);
                 setLoserTeam(["", ""]);
               }}
-            >
-              CANCEL
-            </button>
-            <button
-              className="text-xs rounded px-4 py-2 bg-green-700"
+              label="cancel"
+            />
+            <Button
+              className="bg-green-700"
               onClick={handeSubmit}
-            >
-              CREATE
-            </button>
+              label="create"
+            />
           </div>
         </>
       ) : (
