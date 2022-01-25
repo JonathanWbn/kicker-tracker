@@ -1,6 +1,6 @@
 export type PlayerId = string;
 export type PlayerAnimal =
-  | "momme"
+  | "flyingJohannes"
   | "pandabear"
   | "dog"
   | "elephant"
@@ -67,7 +67,7 @@ export interface IPlayer {
 }
 
 export const animals: PlayerAnimal[] = [
-  "momme",
+  "flyingJohannes",
   "pandabear",
   "dog",
   "elephant",
