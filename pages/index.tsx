@@ -8,6 +8,7 @@ import GameList from "../components/game-list";
 import PlayerForm from "../components/player-form";
 import PlayerList from "../components/player-list";
 import { IGame } from "../domain/Game";
+import { Leaderboard } from "../domain/Leaderboard";
 import { IPlayer, PlayerId } from "../domain/Player";
 import { UpstashGameRepository } from "../repository/UpstashGameRepository";
 import { UpstashPlayerRepository } from "../repository/UpstashPlayerRepository";
@@ -66,6 +67,7 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
           getPlayer,
           games,
           refreshGames: fetchGames,
+          leaderboard: new Leaderboard(players, games),
         }}
       >
         {tab === "games" && (
@@ -91,6 +93,7 @@ export const DataContext = createContext<{
   getPlayer: (id: PlayerId) => IPlayer;
   games: IGame[];
   refreshGames: VoidFunction;
+  leaderboard: Leaderboard;
 }>({
   players: [],
   refreshPlayers: () => {},
@@ -99,6 +102,7 @@ export const DataContext = createContext<{
   },
   games: [],
   refreshGames: () => {},
+  leaderboard: new Leaderboard([], []),
 });
 
 export async function getServerSideProps() {

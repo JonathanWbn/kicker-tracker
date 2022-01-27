@@ -1,31 +1,37 @@
 import axios from "axios";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useContext, useState, Fragment } from "react";
 import { format } from "date-fns";
 
-import { IGame } from "../domain/Game";
 import { DataContext } from "../pages";
 import Button from "./button";
 import Card from "./card";
+import { RatedGame } from "../domain/Leaderboard";
 
 function GameList() {
-  const { games } = useContext(DataContext);
+  const { leaderboard } = useContext(DataContext);
 
-  return (
-    <>
-      {games
-        .sort((a, b) => +b.createdAt - +a.createdAt)
-        .map((game) => (
-          <GameItem key={game.id} game={game} />
-        ))}
-    </>
-  );
+  const gamesByDay = leaderboard.ratedGames
+    .reverse()
+    .reduce<Record<string, RatedGame[]>>((games, game) => {
+      const day = format(game.createdAt, "MMM Do");
+      return { ...games, [day]: [...(games[day] || []), game] };
+    }, {});
+
+  return Object.entries(gamesByDay).map(([day, games]) => (
+    <Fragment key={day}>
+      <p className="text-slate-400 mt-4 mb-1">{day}</p>
+      {games.map((game) => (
+        <GameItem key={game.id} game={game} />
+      ))}
+    </Fragment>
+  ));
 }
 
 function GameItem({
-  game: { id, winnerTeam, loserTeam, createdAt },
+  game: { id, winnerTeam, loserTeam, delta },
 }: {
-  game: IGame;
+  game: RatedGame;
 }) {
   const { getPlayer, refreshGames } = useContext(DataContext);
   const [isDeletion, setIsDeletion] = useState(false);
@@ -39,7 +45,7 @@ function GameItem({
   }
 
   return (
-    <Card className="mt-2" onClick={() => !isDeletion && setIsDeletion(true)}>
+    <Card className="mb-2" onClick={() => !isDeletion && setIsDeletion(true)}>
       {isDeletion ? (
         <div className="flex justify-around">
           <Button onClick={() => setIsDeletion(false)} label="cancel" />
@@ -68,7 +74,7 @@ function GameItem({
               {winner1.name}, {winner2.name}
             </p>
             <div className="grow"></div>
-            <p className="text-slate-300">Winner</p>
+            <p className="text-green-400">+{delta}</p>
           </div>
           <div className="flex items-center">
             <Image
@@ -87,7 +93,7 @@ function GameItem({
               {loser1.name}, {loser2.name}
             </p>
             <div className="grow"></div>
-            <p className="text-slate-400">{format(createdAt, "MMM Do")}</p>
+            <p className="text-red-400">-{delta}</p>
           </div>
         </>
       )}

@@ -9,9 +9,7 @@ import Button from "./button";
 import Card from "./card";
 
 function PlayerList() {
-  const { players, games } = useContext(DataContext);
-
-  const leaderboard = new Leaderboard(players, games);
+  const { leaderboard } = useContext(DataContext);
 
   return (
     <Card>
