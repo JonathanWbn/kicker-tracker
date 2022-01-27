@@ -18,14 +18,18 @@ function GameList() {
       return { ...games, [day]: [...(games[day] || []), game] };
     }, {});
 
-  return Object.entries(gamesByDay).map(([day, games]) => (
-    <Fragment key={day}>
-      <p className="text-slate-400 mt-4 mb-1">{day}</p>
-      {games.map((game) => (
-        <GameItem key={game.id} game={game} />
+  return (
+    <>
+      {Object.entries(gamesByDay).map(([day, games]) => (
+        <Fragment key={day}>
+          <p className="text-slate-400 mt-4 mb-1">{day}</p>
+          {games.map((game) => (
+            <GameItem key={game.id} game={game} />
+          ))}
+        </Fragment>
       ))}
-    </Fragment>
-  ));
+    </>
+  );
 }
 
 function GameItem({

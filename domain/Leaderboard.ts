@@ -64,7 +64,7 @@ export class Leaderboard {
     });
   }
 
-  private getGameDelta(game: Game, ratedPlayers: RatedPlayer[]): number {
+  public getGameDelta(game: Game, ratedPlayers: RatedPlayer[]): number {
     const ratingWinner1 = ratedPlayers.find(
       (player) => game.winnerTeam[0] === player.id
     )!.rating;

@@ -2,7 +2,7 @@ import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
 
 import { DataContext } from "../pages";
-import { Team } from "../domain/Game";
+import { Game, Team } from "../domain/Game";
 import Image from "next/image";
 import { PlayerId } from "../domain/Player";
 import { uniq } from "lodash";
@@ -10,7 +10,8 @@ import Button from "./button";
 import Card from "./card";
 
 function GameForm() {
-  const { refreshGames, players, getPlayer } = useContext(DataContext);
+  const { refreshGames, players, getPlayer, leaderboard } =
+    useContext(DataContext);
   const [isAdding, setIsAdding] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState<Team>(["", ""]);
   const [loserTeam, setLoserTeam] = useState<Team>(["", ""]);
@@ -20,6 +21,13 @@ function GameForm() {
 
   const isComplete =
     uniq([...winnerTeam, ...loserTeam].filter(Boolean)).length === 4;
+
+  const delta =
+    isComplete &&
+    leaderboard.getGameDelta(
+      new Game("", new Date(), winnerTeam, loserTeam),
+      leaderboard.rankedPlayers
+    );
 
   async function handeSubmit(e: MouseEvent<HTMLButtonElement>) {
     if (!isComplete) {
@@ -74,6 +82,9 @@ function GameForm() {
             <strong>Winner Team</strong>:{" "}
             {getPlayer(winner1).name || <i>select</i>},{" "}
             {getPlayer(winner2).name || <i>select</i>}
+            {delta && (
+              <span className="float-right text-green-400">+{delta}</span>
+            )}
           </p>
           <div className="flex flex-wrap items-center justify-center">
             {players.map((player) => (
@@ -99,6 +110,9 @@ function GameForm() {
             <strong>Loser Team</strong>:{" "}
             {getPlayer(loser1).name || <i>select</i>},{" "}
             {getPlayer(loser2).name || <i>select</i>}
+            {delta && (
+              <span className="float-right text-red-400">-{delta}</span>
+            )}
           </p>
           <div className="flex flex-wrap items-center justify-center">
             {players.map((player) => (
