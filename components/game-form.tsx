@@ -7,6 +7,7 @@ import Image from "next/image";
 import { PlayerId } from "../domain/Player";
 import { uniq } from "lodash";
 import Button from "./button";
+import Card from "./card";
 
 function GameForm() {
   const { refreshGames, players, getPlayer } = useContext(DataContext);
@@ -66,12 +67,7 @@ function GameForm() {
   }
 
   return (
-    <div
-      className={`${
-        isAdding ? "bg-slate-600" : "bg-slate-700"
-      } rounded-2xl p-4 text-slate-100`}
-      onClick={() => !isAdding && setIsAdding(true)}
-    >
+    <Card isActive={isAdding} onClick={() => !isAdding && setIsAdding(true)}>
       {isAdding ? (
         <>
           <p>
@@ -149,7 +145,7 @@ function GameForm() {
       ) : (
         <p className="text-center text-lg">+</p>
       )}
-    </div>
+    </Card>
   );
 }
 

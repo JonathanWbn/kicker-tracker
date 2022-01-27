@@ -5,22 +5,19 @@ import { format } from "date-fns";
 
 import { IGame } from "../domain/Game";
 import { DataContext } from "../pages";
-import GameForm from "./game-form";
 import Button from "./button";
+import Card from "./card";
 
 function GameList() {
   const { games } = useContext(DataContext);
 
   return (
     <>
-      <GameForm />
-      <ul className="mt-1">
-        {games
-          .sort((a, b) => +b.createdAt - +a.createdAt)
-          .map((game) => (
-            <GameItem key={game.id} game={game} />
-          ))}
-      </ul>
+      {games
+        .sort((a, b) => +b.createdAt - +a.createdAt)
+        .map((game) => (
+          <GameItem key={game.id} game={game} />
+        ))}
     </>
   );
 }
@@ -42,10 +39,7 @@ function GameItem({
   }
 
   return (
-    <li
-      className="bg-slate-700 rounded-2xl p-4 mt-2"
-      onClick={() => !isDeletion && setIsDeletion(true)}
-    >
+    <Card className="mt-2" onClick={() => !isDeletion && setIsDeletion(true)}>
       {isDeletion ? (
         <div className="flex justify-around">
           <Button onClick={() => setIsDeletion(false)} label="cancel" />
@@ -97,7 +91,7 @@ function GameItem({
           </div>
         </>
       )}
-    </li>
+    </Card>
   );
 }
 

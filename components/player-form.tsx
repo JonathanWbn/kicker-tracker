@@ -6,6 +6,7 @@ import { animals, PlayerAnimal } from "../domain/Player";
 import Image from "next/image";
 import { upperFirst } from "lodash";
 import Button from "./button";
+import Card from "./card";
 
 function PlayerForm() {
   const { refreshPlayers, players } = useContext(DataContext);
@@ -26,10 +27,8 @@ function PlayerForm() {
   }
 
   return (
-    <div
-      className={`${
-        isAdding ? "bg-slate-600" : "bg-slate-700"
-      } rounded-2xl p-4 text-slate-100 mt-2 flex flex-col`}
+    <Card
+      className="mt-2 flex flex-col"
       onClick={() => !isAdding && setIsAdding(true)}
     >
       {isAdding ? (
@@ -38,6 +37,7 @@ function PlayerForm() {
             className="rounded bg-slate-700 px-2 py-1 mb-2"
             placeholder="Name"
             value={name}
+            autoFocus
             onChange={(e) => setName(e.target.value)}
           ></input>
           <div className="flex flex-wrap items-center justify-center">
@@ -64,10 +64,11 @@ function PlayerForm() {
           </div>
           <div className="flex justify-between items-center mt-2">
             {animal ? (
-              <p className="text-sm text-right">{upperFirst(animal)}</p>
+              <p className="text-sm flex-grow">{upperFirst(animal)}</p>
             ) : (
-              <span />
+              <span className="flex-grow" />
             )}
+            <Button onClick={() => setIsAdding(false)} label="cancel" />
             <Button
               className="bg-green-700"
               onClick={handeSubmit}
@@ -78,7 +79,7 @@ function PlayerForm() {
       ) : (
         <p className="text-center text-lg">+</p>
       )}
-    </div>
+    </Card>
   );
 }
 
