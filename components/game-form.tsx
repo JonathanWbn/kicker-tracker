@@ -10,8 +10,7 @@ import Button from "./button";
 import Card from "./card";
 
 function GameForm() {
-  const { refreshGames, players, getPlayer, leaderboard } =
-    useContext(DataContext);
+  const { refreshGames, leaderboard } = useContext(DataContext);
   const [isAdding, setIsAdding] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState<Team>(["", ""]);
   const [loserTeam, setLoserTeam] = useState<Team>(["", ""]);
@@ -78,67 +77,61 @@ function GameForm() {
     <Card isActive={isAdding} onClick={() => !isAdding && setIsAdding(true)}>
       {isAdding ? (
         <>
-          <p>
-            <strong>Winner Team</strong>:{" "}
-            {getPlayer(winner1).name || <i>select</i>},{" "}
-            {getPlayer(winner2).name || <i>select</i>}
-            {delta && (
-              <span className="float-right text-green-400">+{delta}</span>
-            )}
-          </p>
-          <div className="flex flex-wrap items-center justify-center">
-            {players.map((player) => (
-              <div
-                key={player.id}
-                className={`m-1 p-1 flex flex-col items-center rounded-lg border-2 ${
-                  winnerTeam.includes(player.id)
-                    ? "border-slate-300"
-                    : "border-transparent"
-                }`}
-                onClick={() => handleWinnerSelect(player.id)}
-              >
-                <Image
-                  src={`/animals/${player.animal}.png`}
-                  alt={player.animal}
-                  width={32}
-                  height={32}
-                />
-              </div>
-            ))}
+          <div className="flex justify-between px-3 items-center border-b border-slate-500">
+            <p className="text-lg font-bold">Winner</p>
+            {delta && <p className="text-lg">Δ {delta}</p>}
+            <p className="text-lg font-bold">Loser</p>
           </div>
-          <p className="mt-2">
-            <strong>Loser Team</strong>:{" "}
-            {getPlayer(loser1).name || <i>select</i>},{" "}
-            {getPlayer(loser2).name || <i>select</i>}
-            {delta && (
-              <span className="float-right text-red-400">-{delta}</span>
-            )}
-          </p>
-          <div className="flex flex-wrap items-center justify-center">
-            {players.map((player) => (
-              <div
-                key={player.id}
-                className={`m-1 p-1 flex flex-col items-center rounded-lg border-2 ${
-                  loserTeam.includes(player.id)
-                    ? "border-slate-300"
-                    : "border-transparent"
-                } ${
-                  loserTeam.includes(player.id) &&
-                  winnerTeam.includes(player.id)
-                    ? "border-red-400"
-                    : ""
-                }`}
-                onClick={() => handleLoserSelect(player.id)}
-              >
-                <Image
-                  className="border"
-                  src={`/animals/${player.animal}.png`}
-                  alt={player.animal}
-                  width={32}
-                  height={32}
-                />
-              </div>
-            ))}
+          <div className="flex">
+            <div className="flex flex-col items-start flex-grow">
+              {leaderboard.rankedPlayers.map((player) => (
+                <Button
+                  key={player.id}
+                  className={`mt-1 text-base flex items-center px-3 py-1 ${
+                    winnerTeam.includes(player.id) ? "bg-slate-500" : ""
+                  }`}
+                  onClick={() => handleWinnerSelect(player.id)}
+                  label={
+                    <>
+                      <Image
+                        src={`/animals/${player.animal}.png`}
+                        alt={player.animal}
+                        width={26}
+                        height={26}
+                      />
+                      <span className="ml-2">{player.name}</span>
+                    </>
+                  }
+                ></Button>
+              ))}
+            </div>
+            <div className="flex flex-col items-end">
+              {leaderboard.rankedPlayers.map((player) => (
+                <Button
+                  key={player.id}
+                  className={`mt-1 text-base flex justify-end items-center px-3 py-1 ${
+                    loserTeam.includes(player.id) ? "bg-slate-500" : ""
+                  } ${
+                    loserTeam.includes(player.id) &&
+                    winnerTeam.includes(player.id)
+                      ? "bg-red-400"
+                      : ""
+                  }`}
+                  onClick={() => handleLoserSelect(player.id)}
+                  label={
+                    <>
+                      <span className="mr-2">{player.name}</span>
+                      <Image
+                        src={`/animals/${player.animal}.png`}
+                        alt={player.animal}
+                        width={26}
+                        height={26}
+                      />
+                    </>
+                  }
+                ></Button>
+              ))}
+            </div>
           </div>
           <div className="flex justify-between mt-4">
             <Button
