@@ -6,11 +6,17 @@ interface ButtonProps
     HTMLButtonElement
   > {
   label: ReactNode;
+  textSize?: string;
 }
 
-function Button({ label, className = "bg-slate-700", ...props }: ButtonProps) {
+function Button({
+  label,
+  textSize = "text-xs",
+  className = "bg-slate-700",
+  ...props
+}: ButtonProps) {
   return (
-    <button {...props} className={`text-xs rounded px-4 py-2 ${className}`}>
+    <button {...props} className={`${textSize} rounded px-4 py-2 ${className}`}>
       {typeof label === "string" ? label.toUpperCase() : label}
     </button>
   );

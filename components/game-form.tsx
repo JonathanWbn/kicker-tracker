@@ -87,7 +87,8 @@ function GameForm() {
               {leaderboard.rankedPlayers.map((player) => (
                 <Button
                   key={player.id}
-                  className={`mt-1 text-base flex items-center ${
+                  textSize="text-base"
+                  className={`mt-1 flex items-center ${
                     winnerTeam.includes(player.id) ? "bg-slate-500" : ""
                   }`}
                   onClick={() => handleWinnerSelect(player.id)}
@@ -109,7 +110,8 @@ function GameForm() {
               {leaderboard.rankedPlayers.map((player) => (
                 <Button
                   key={player.id}
-                  className={`mt-1 text-base flex justify-end items-center ${
+                  textSize="text-base"
+                  className={`mt-1 flex justify-end items-center ${
                     loserTeam.includes(player.id) ? "bg-slate-500" : ""
                   } ${
                     loserTeam.includes(player.id) &&
