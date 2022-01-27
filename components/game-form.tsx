@@ -77,7 +77,7 @@ function GameForm() {
     <Card isActive={isAdding} onClick={() => !isAdding && setIsAdding(true)}>
       {isAdding ? (
         <>
-          <div className="flex justify-between px-3 items-center border-b border-slate-500">
+          <div className="flex justify-between px-4 items-center border-b border-slate-500">
             <p className="text-lg font-bold">Winner</p>
             {delta && <p className="text-lg">Δ {delta}</p>}
             <p className="text-lg font-bold">Loser</p>
@@ -87,7 +87,7 @@ function GameForm() {
               {leaderboard.rankedPlayers.map((player) => (
                 <Button
                   key={player.id}
-                  className={`mt-1 text-base flex items-center px-3 py-1 ${
+                  className={`mt-1 text-base flex items-center ${
                     winnerTeam.includes(player.id) ? "bg-slate-500" : ""
                   }`}
                   onClick={() => handleWinnerSelect(player.id)}
@@ -96,8 +96,8 @@ function GameForm() {
                       <Image
                         src={`/animals/${player.animal}.png`}
                         alt={player.animal}
-                        width={26}
-                        height={26}
+                        width={24}
+                        height={24}
                       />
                       <span className="ml-2">{player.name}</span>
                     </>
@@ -109,7 +109,7 @@ function GameForm() {
               {leaderboard.rankedPlayers.map((player) => (
                 <Button
                   key={player.id}
-                  className={`mt-1 text-base flex justify-end items-center px-3 py-1 ${
+                  className={`mt-1 text-base flex justify-end items-center ${
                     loserTeam.includes(player.id) ? "bg-slate-500" : ""
                   } ${
                     loserTeam.includes(player.id) &&
@@ -124,8 +124,8 @@ function GameForm() {
                       <Image
                         src={`/animals/${player.animal}.png`}
                         alt={player.animal}
-                        width={26}
-                        height={26}
+                        width={24}
+                        height={24}
                       />
                     </>
                   }

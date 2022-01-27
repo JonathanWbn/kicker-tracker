@@ -50,12 +50,12 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
     <div className="bg-slate-800 px-5 pb-5 text-slate-200 min-h-screen">
       <div className="flex py-3 justify-around">
         <Button
-          className={`text-lg ${tab === "games" ? "bg-slate-600" : ""}`}
+          className={`text-base ${tab === "games" ? "bg-slate-600" : ""}`}
           onClick={() => setTab("games")}
           label="games"
         />
         <Button
-          className={`text-lg ${tab === "players" ? "bg-slate-600" : ""}`}
+          className={`text-base ${tab === "players" ? "bg-slate-600" : ""}`}
           onClick={() => setTab("players")}
           label="leaderboard"
         />
