@@ -10,3 +10,7 @@ Try it out at: [thanks-for-playing.com](https://thanks-for-playing.com/)
 - [React + Next.js](https://nextjs.org/)
 - [Vercel](https://vercel.com/) (hosting)
 - [Redis with Upstash](https://upstash.com/redis) (database)
+
+## Contributing
+
+Check the [CONTRIBUTING.md](https://github.com/JonathanWbn/kicker-tracker/blob/master/CONTRIBUTING.md).
