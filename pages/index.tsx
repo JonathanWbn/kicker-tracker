@@ -85,6 +85,16 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
           </>
         )}
       </DataContext.Provider>
+
+      <div className="mt-4 flex justify-center underline">
+        <a
+          href="https://github.com/JonathanWbn/kicker-tracker"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {"Don't like your rating? Just change the rules!"}
+        </a>
+      </div>
     </div>
   );
 };
