@@ -14,7 +14,7 @@ function GameList() {
   const gamesByDay = leaderboard.ratedGames
     .reverse()
     .reduce<Record<string, RatedGame[]>>((games, game) => {
-      const day = format(game.createdAt, "MMM Do");
+      const day = format(game.createdAt, "MMM do");
       return { ...games, [day]: [...(games[day] || []), game] };
     }, {});
 
