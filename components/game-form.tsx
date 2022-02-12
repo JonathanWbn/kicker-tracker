@@ -25,7 +25,7 @@ function GameForm() {
     isComplete &&
     leaderboard.getGameDelta(
       new Game("", new Date(), winnerTeam, loserTeam),
-      leaderboard.rankedPlayers
+      leaderboard.getRankedPlayers()
     );
 
   async function handeSubmit(e: MouseEvent<HTMLButtonElement>) {
@@ -84,7 +84,7 @@ function GameForm() {
           </div>
           <div className="flex">
             <div className="flex flex-col items-start flex-grow">
-              {leaderboard.rankedPlayers.map((player) => (
+              {leaderboard.getRankedPlayers().map((player) => (
                 <Button
                   key={player.id}
                   textSize="text-base"
@@ -107,7 +107,7 @@ function GameForm() {
               ))}
             </div>
             <div className="flex flex-col items-end">
-              {leaderboard.rankedPlayers.map((player) => (
+              {leaderboard.getRankedPlayers().map((player) => (
                 <Button
                   key={player.id}
                   textSize="text-base"

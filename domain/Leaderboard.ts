@@ -15,13 +15,14 @@ export class Leaderboard {
     public readonly games: Game[]
   ) {}
 
-  get rankedPlayers(): RatedPlayer[] {
+  getRankedPlayers(date = new Date()): RatedPlayer[] {
     let ratedPlayers: RatedPlayer[] = this.players.map((player) => ({
       ...player,
       rating: 1500,
     }));
 
     this.games
+      .filter((game) => +game.createdAt < +date)
       .sort((a, b) => +a.createdAt - +b.createdAt)
       .forEach((game) => {
         ratedPlayers = this.applyGame(game, ratedPlayers);
@@ -37,7 +38,7 @@ export class Leaderboard {
         const previousRankedPlayers = new Leaderboard(
           this.players,
           this.games.slice(0, index)
-        ).rankedPlayers;
+        ).getRankedPlayers();
 
         return {
           ...game,
