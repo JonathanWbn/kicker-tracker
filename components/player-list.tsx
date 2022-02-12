@@ -23,6 +23,13 @@ function PlayerList() {
 
   return (
     <Card>
+      <div className="flex justify-center mb-2">
+        <Button
+          onClick={date ? undefined : start}
+          label={date ? format(date, "MMM do") : "show ranking history"}
+          className={date ? "" : "bg-blue-500"}
+        />
+      </div>
       <Flipper flipKey={rankedPlayers.map(({ id }) => id).join()}>
         {rankedPlayers.map((player, i) => (
           <PlayerItem
@@ -32,14 +39,7 @@ function PlayerList() {
             showBar={Boolean(date)}
           />
         ))}
-      </Flipper>
-      <div className="flex justify-center mt-2">
-        <Button
-          onClick={date ? undefined : start}
-          label={date ? format(date, "MMM do") : "show ranking history"}
-          className={date ? "" : "bg-blue-500"}
-        />
-      </div>
+      </Flipper>{" "}
     </Card>
   );
 }
