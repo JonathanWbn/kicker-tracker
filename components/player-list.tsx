@@ -66,11 +66,7 @@ function PlayerItem({
   }
 
   const percentage = (player.rating / 3000) * 100;
-  const imageStyles = useSpring({
-    position: "absolute",
-    marginTop: 6,
-    marginLeft: `${percentage}%`,
-  });
+  const imageStyles = useSpring({ marginLeft: `${percentage}%` });
   const wrapperStyles = useSpring({
     background: `linear-gradient(to right, rgb(204 225 255 / 30%) ${percentage}%, transparent ${percentage}%)`,
   });
@@ -82,7 +78,9 @@ function PlayerItem({
         style={showBar ? wrapperStyles : {}}
       >
         {showBar && (
-          <animated.div style={imageStyles}>
+          <animated.div
+            style={{ position: "absolute", marginTop: 6, ...imageStyles }}
+          >
             <Image
               src={`/animals/${player.animal}.png`}
               alt={player.name}
