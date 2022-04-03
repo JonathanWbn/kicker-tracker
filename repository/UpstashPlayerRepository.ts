@@ -7,7 +7,7 @@ auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN);
 
 export class UpstashPlayerRepository {
   public async create(name: string, animal: PlayerAnimal) {
-    const player = new Player(uuid(), name, animal);
+    const player = new Player(uuid(), name, animal, false);
 
     await set(`PLAYER#${player.id}`, JSON.stringify(player));
   }
@@ -28,8 +28,8 @@ export class UpstashPlayerRepository {
     return Promise.all(
       keys.map(async (key: string) => {
         const { data } = await get(key);
-        const { id, name, animal } = JSON.parse(data) as IPlayer;
-        return new Player(id, name, animal);
+        const { id, name, animal, isRetired } = JSON.parse(data) as IPlayer;
+        return new Player(id, name, animal, Boolean(isRetired));
       })
     );
   }

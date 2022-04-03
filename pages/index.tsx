@@ -43,7 +43,7 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
 
   function getPlayer(id: PlayerId) {
     const player = players?.find((el) => el.id === id);
-    return player || { id: "", name: "", animal: "bat" };
+    return player || { id: "", name: "", animal: "bat", isRetired: false };
   }
 
   return (

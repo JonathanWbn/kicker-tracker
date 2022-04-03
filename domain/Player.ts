@@ -56,7 +56,8 @@ export class Player implements IPlayer {
   constructor(
     public readonly id: PlayerId,
     public readonly name: string,
-    public readonly animal: PlayerAnimal
+    public readonly animal: PlayerAnimal,
+    public readonly isRetired: boolean
   ) {}
 }
 
@@ -64,6 +65,7 @@ export interface IPlayer {
   id: PlayerId;
   name: string;
   animal: PlayerAnimal;
+  isRetired: boolean;
 }
 
 export const animals: PlayerAnimal[] = [

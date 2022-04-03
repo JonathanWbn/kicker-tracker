@@ -10,6 +10,7 @@ import Button from "./button";
 import Card from "./card";
 import { Flipped, Flipper } from "react-flip-toolkit";
 import { add, endOfDay, format, isSameDay, sub, isBefore } from "date-fns";
+import { partition } from "lodash";
 
 function PlayerList() {
   const { leaderboard } = useContext(DataContext);
@@ -20,6 +21,10 @@ function PlayerList() {
   );
 
   const rankedPlayers = leaderboard.getRankedPlayers(date);
+  const [activePlayers, retiredPlayers] = partition(
+    rankedPlayers,
+    (player) => date || !player.isRetired
+  );
 
   return (
     <Card>
@@ -30,14 +35,17 @@ function PlayerList() {
           className={date ? "" : "bg-blue-500"}
         />
       </div>
-      <Flipper flipKey={rankedPlayers.map(({ id }) => id).join()}>
-        {rankedPlayers.map((player, i) => (
+      <Flipper flipKey={activePlayers.map(({ id }) => id).join()}>
+        {activePlayers.map((player, i) => (
           <PlayerItem
             key={player.id}
             player={player}
             rank={i + 1}
             showBar={Boolean(date)}
           />
+        ))}
+        {retiredPlayers.map((player, i) => (
+          <PlayerItem key={player.id} player={player} isRetired />
         ))}
       </Flipper>{" "}
     </Card>
@@ -48,10 +56,12 @@ function PlayerItem({
   player,
   rank,
   showBar,
+  isRetired,
 }: {
   player: RatedPlayer;
-  rank: number;
-  showBar: boolean;
+  rank?: number;
+  showBar?: boolean;
+  isRetired?: boolean;
 }) {
   const { refreshPlayers, players } = useContext(DataContext);
   const [isNameEdit, setIsNameEdit] = useState(false);
@@ -60,6 +70,20 @@ function PlayerItem({
 
   async function handleSave() {
     await axios.post(`/api/players/${player.id}`, values);
+    refreshPlayers();
+    setIsNameEdit(false);
+    setIsAnimalEdit(false);
+  }
+
+  async function handleRetirement() {
+    const confirmed = confirm("Are you sure you want to retire this player?");
+    if (!confirmed) {
+      return;
+    }
+    await axios.post(`/api/players/${player.id}`, {
+      ...values,
+      isRetired: true,
+    });
     refreshPlayers();
     setIsNameEdit(false);
     setIsAnimalEdit(false);
@@ -74,7 +98,9 @@ function PlayerItem({
   return (
     <Flipped flipId={player.id}>
       <animated.div
-        className="border-b last:border-0 p-2 border-slate-600 flex items-center relative"
+        className={`border-b last:border-0 p-2 border-slate-600 flex items-center relative ${
+          isRetired ? "opacity-50" : ""
+        }`}
         style={showBar ? wrapperStyles : {}}
       >
         {showBar && (
@@ -130,11 +156,14 @@ function PlayerItem({
                   </div>
                 ))}
             </div>
-            <Button onClick={handleSave} label="Save" />
+            <div className="flex justify-around">
+              <Button onClick={handleRetirement} label="Retire" />
+              <Button onClick={handleSave} label="Save" />
+            </div>
           </div>
         ) : (
           <>
-            <p className="mr-2 w-4 text-slate-300 text-center">{rank}</p>
+            <p className="mr-2 w-4 text-slate-300 text-center">{rank || "-"}</p>
             <Image
               src={`/animals/${player.animal}.png`}
               alt={player.animal}
