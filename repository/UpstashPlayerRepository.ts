@@ -21,10 +21,7 @@ export class UpstashPlayerRepository {
   }
 
   public async listAll() {
-    console.log("listAll players");
     const [, keys] = await scan(0, { match: "PLAYER#*", count: 1000 });
-
-    console.log("player keys", keys.length);
 
     return Promise.all(
       keys.map(async (key: string) => {

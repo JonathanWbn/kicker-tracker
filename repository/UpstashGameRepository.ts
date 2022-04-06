@@ -23,10 +23,23 @@ export class UpstashGameRepository {
 
     return Promise.all(
       keys.map(async (key: string) => {
-        const data = await get(key);
+        const data = await promiseTimeout(3000, get(key));
         const { id, createdAt, winnerTeam, loserTeam } = data as IGame;
         return new Game(id, new Date(createdAt), winnerTeam, loserTeam);
       })
     );
   }
+}
+
+function promiseTimeout<T>(ms: number, promise: Promise<T>): Promise<T> {
+  // Create a promise that rejects in <ms> milliseconds
+  let timeout = new Promise<T>((resolve, reject) => {
+    let id = setTimeout(() => {
+      clearTimeout(id);
+      reject("Timed out in " + ms + "ms.");
+    }, ms);
+  });
+
+  // Returns a race between our timeout and the passed in promise
+  return Promise.race([promise, timeout]);
 }
