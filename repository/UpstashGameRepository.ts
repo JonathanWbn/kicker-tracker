@@ -21,7 +21,7 @@ export class UpstashGameRepository {
     const {
       data: [, keys],
     } = await scan(0, "MATCH", "GAME#*", "COUNT", 1000);
-    console.log("game keys", keys);
+    console.log("game keys", keys.length);
 
     return Promise.all(
       keys.map(async (key: string) => {
