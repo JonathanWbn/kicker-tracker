@@ -29,9 +29,7 @@ export class UpstashPlayerRepository {
     return Promise.all(
       keys.map(async (key: string) => {
         const data = await get(key);
-        const { id, name, animal, isRetired } = JSON.parse(
-          data as string
-        ) as IPlayer;
+        const { id, name, animal, isRetired } = data as IPlayer;
         return new Player(id, name, animal, Boolean(isRetired));
       })
     );

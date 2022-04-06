@@ -24,9 +24,7 @@ export class UpstashGameRepository {
     return Promise.all(
       keys.map(async (key: string) => {
         const data = await get(key);
-        const { id, createdAt, winnerTeam, loserTeam } = JSON.parse(
-          data as string
-        ) as IGame;
+        const { id, createdAt, winnerTeam, loserTeam } = data as IGame;
         return new Game(id, new Date(createdAt), winnerTeam, loserTeam);
       })
     );
