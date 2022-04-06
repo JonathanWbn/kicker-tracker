@@ -118,6 +118,7 @@ export const DataContext = createContext<{
 });
 
 export async function getServerSideProps() {
+  console.log("in here");
   const gameRepository = new UpstashGameRepository();
   const playerRepository = new UpstashPlayerRepository();
 
@@ -125,6 +126,7 @@ export async function getServerSideProps() {
     gameRepository.listAll(),
     playerRepository.listAll(),
   ]);
+  console.log("in here twoo");
 
   return {
     props: {

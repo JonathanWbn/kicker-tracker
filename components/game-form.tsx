@@ -84,55 +84,61 @@ function GameForm() {
           </div>
           <div className="flex">
             <div className="flex flex-col items-start flex-grow">
-              {leaderboard.getRankedPlayers().map((player) => (
-                <Button
-                  key={player.id}
-                  textSize="text-base"
-                  className={`mt-1 flex items-center ${
-                    winnerTeam.includes(player.id) ? "bg-slate-500" : ""
-                  }`}
-                  onClick={() => handleWinnerSelect(player.id)}
-                  label={
-                    <>
-                      <Image
-                        src={`/animals/${player.animal}.png`}
-                        alt={player.animal}
-                        width={24}
-                        height={24}
-                      />
-                      <span className="ml-2">{player.name}</span>
-                    </>
-                  }
-                ></Button>
-              ))}
+              {leaderboard
+                .getRankedPlayers()
+                .filter((player) => !player.isRetired)
+                .map((player) => (
+                  <Button
+                    key={player.id}
+                    textSize="text-base"
+                    className={`mt-1 flex items-center ${
+                      winnerTeam.includes(player.id) ? "bg-slate-500" : ""
+                    }`}
+                    onClick={() => handleWinnerSelect(player.id)}
+                    label={
+                      <>
+                        <Image
+                          src={`/animals/${player.animal}.png`}
+                          alt={player.animal}
+                          width={24}
+                          height={24}
+                        />
+                        <span className="ml-2">{player.name}</span>
+                      </>
+                    }
+                  ></Button>
+                ))}
             </div>
             <div className="flex flex-col items-end">
-              {leaderboard.getRankedPlayers().map((player) => (
-                <Button
-                  key={player.id}
-                  textSize="text-base"
-                  className={`mt-1 flex justify-end items-center ${
-                    loserTeam.includes(player.id) ? "bg-slate-500" : ""
-                  } ${
-                    loserTeam.includes(player.id) &&
-                    winnerTeam.includes(player.id)
-                      ? "bg-red-400"
-                      : ""
-                  }`}
-                  onClick={() => handleLoserSelect(player.id)}
-                  label={
-                    <>
-                      <span className="mr-2">{player.name}</span>
-                      <Image
-                        src={`/animals/${player.animal}.png`}
-                        alt={player.animal}
-                        width={24}
-                        height={24}
-                      />
-                    </>
-                  }
-                ></Button>
-              ))}
+              {leaderboard
+                .getRankedPlayers()
+                .filter((player) => !player.isRetired)
+                .map((player) => (
+                  <Button
+                    key={player.id}
+                    textSize="text-base"
+                    className={`mt-1 flex justify-end items-center ${
+                      loserTeam.includes(player.id) ? "bg-slate-500" : ""
+                    } ${
+                      loserTeam.includes(player.id) &&
+                      winnerTeam.includes(player.id)
+                        ? "bg-red-400"
+                        : ""
+                    }`}
+                    onClick={() => handleLoserSelect(player.id)}
+                    label={
+                      <>
+                        <span className="mr-2">{player.name}</span>
+                        <Image
+                          src={`/animals/${player.animal}.png`}
+                          alt={player.animal}
+                          width={24}
+                          height={24}
+                        />
+                      </>
+                    }
+                  ></Button>
+                ))}
             </div>
           </div>
           <div className="flex justify-between mt-4">
