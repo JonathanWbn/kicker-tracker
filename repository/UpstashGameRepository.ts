@@ -1,9 +1,9 @@
-import { auth, set, scan, get, del } from "@upstash/redis";
+import { Redis } from "@upstash/redis";
 import { v4 as uuid } from "uuid";
 
 import { Game, IGame, Team } from "../domain/Game";
 
-auth(process.env.UPSTASH_REDIS_REST_URL, process.env.UPSTASH_REDIS_REST_TOKEN);
+const { set, scan, get, del } = Redis.fromEnv();
 
 export class UpstashGameRepository {
   public async create(winnerTeam: Team, loserTeam: Team) {
@@ -18,16 +18,14 @@ export class UpstashGameRepository {
 
   public async listAll() {
     console.log("listAll games");
-    const {
-      data: [, keys],
-    } = await scan(0, "MATCH", "GAME#*", "COUNT", 1000);
+    const [, keys] = await scan(0, { match: "GAME#*", count: 1000 });
     console.log("game keys", keys.length);
 
     return Promise.all(
       keys.map(async (key: string) => {
-        const { data } = await get(key);
+        const data = await get(key);
         const { id, createdAt, winnerTeam, loserTeam } = JSON.parse(
-          data
+          data as string
         ) as IGame;
         return new Game(id, new Date(createdAt), winnerTeam, loserTeam);
       })
