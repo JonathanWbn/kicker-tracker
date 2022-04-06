@@ -17,13 +17,17 @@ export class UpstashGameRepository {
   }
 
   public async listAll() {
+    console.log("listAll games");
     const {
       data: [, keys],
     } = await scan(0, "MATCH", "GAME#*", "COUNT", 1000);
+    console.log("keys");
 
     return Promise.all(
       keys.map(async (key: string) => {
+        console.log("getting", key);
         const { data } = await get(key);
+        console.log("got", key);
         const { id, createdAt, winnerTeam, loserTeam } = JSON.parse(
           data
         ) as IGame;

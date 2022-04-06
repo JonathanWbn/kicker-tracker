@@ -21,13 +21,16 @@ export class UpstashPlayerRepository {
   }
 
   public async listAll() {
+    console.log("listAll players");
     const {
       data: [, keys],
     } = await scan(0, "MATCH", "PLAYER#*", "COUNT", 1000);
 
     return Promise.all(
       keys.map(async (key: string) => {
+        console.log("getting", key);
         const { data } = await get(key);
+        console.log("got", key);
         const { id, name, animal, isRetired } = JSON.parse(data) as IPlayer;
         return new Player(id, name, animal, Boolean(isRetired));
       })
