@@ -10,6 +10,7 @@ import { RatedGame } from "../domain/Leaderboard";
 
 function GameList() {
   const { leaderboard } = useContext(DataContext);
+  const [daysShown, setDaysShown] = useState(3);
 
   const gamesByDay = leaderboard.ratedGames
     .reverse()
@@ -20,14 +21,23 @@ function GameList() {
 
   return (
     <>
-      {Object.entries(gamesByDay).map(([day, games]) => (
-        <Fragment key={day}>
-          <p className="text-slate-400 mt-4 mb-1">{day}</p>
-          {games.map((game) => (
-            <GameItem key={game.id} game={game} />
-          ))}
-        </Fragment>
-      ))}
+      {Object.entries(gamesByDay)
+        .slice(0, daysShown)
+        .map(([day, games]) => (
+          <Fragment key={day}>
+            <p className="text-slate-400 mt-4 mb-1">{day}</p>
+            {games.map((game) => (
+              <GameItem key={game.id} game={game} />
+            ))}
+          </Fragment>
+        ))}
+      <div className="flex justify-center">
+        <Button
+          className="bg-slate-600"
+          onClick={() => setDaysShown((v) => v + 3)}
+          label="show more"
+        />
+      </div>
     </>
   );
 }
