@@ -32,19 +32,29 @@ export class Leaderboard {
   }
 
   get ratedGames(): RatedGame[] {
-    return this.games
-      .sort((a, b) => +a.createdAt - +b.createdAt)
-      .map((game, index) => {
-        const previousRankedPlayers = new Leaderboard(
-          this.players,
-          this.games.slice(0, index)
-        ).getRankedPlayers();
+    const playersWithInitialRating: RatedPlayer[] = this.players.map(
+      (player) => ({ ...player, rating: 1500 })
+    );
 
-        return {
-          ...game,
-          delta: this.getGameDelta(game, previousRankedPlayers),
-        };
-      });
+    const { games, players } = this.games
+      .sort((a, b) => +a.createdAt - +b.createdAt)
+      .reduce<{ games: RatedGame[]; players: RatedPlayer[] }>(
+        (curr, game) => {
+          const ratedPlayers = this.applyGame(game, curr.players);
+          const ratedGame: RatedGame = {
+            ...game,
+            delta: this.getGameDelta(game, ratedPlayers),
+          };
+
+          return {
+            games: [...curr.games, ratedGame],
+            players: ratedPlayers,
+          };
+        },
+        { games: [], players: playersWithInitialRating }
+      );
+
+    return games;
   }
 
   private applyGame(game: Game, ratedPlayers: RatedPlayer[]): RatedPlayer[] {
