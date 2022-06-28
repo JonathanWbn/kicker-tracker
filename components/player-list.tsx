@@ -9,12 +9,20 @@ import { animals } from "../domain/Player";
 import Button from "./button";
 import Card from "./card";
 import { Flipped, Flipper } from "react-flip-toolkit";
-import { add, endOfDay, format, isSameDay, sub, isBefore } from "date-fns";
+import {
+  add,
+  endOfDay,
+  format,
+  isSameDay,
+  sub,
+  isBefore,
+  isAfter,
+} from "date-fns";
 import { partition } from "lodash";
 
 function PlayerList() {
   const { leaderboard } = useContext(DataContext);
-  const { start, date } = useTimeline(
+  const { start, date, prev, skip, cancel } = useTimeline(
     sub(leaderboard.ratedGames[0].createdAt, { days: 1 }),
     800,
     (date) => !leaderboard.games.some((game) => isSameDay(date, game.createdAt))
@@ -29,11 +37,17 @@ function PlayerList() {
   return (
     <Card>
       <div className="flex justify-center mb-2">
+        {date && (
+          <Button label="<" className="bg-blue-500" onClick={() => prev(7)} />
+        )}
         <Button
-          onClick={date ? undefined : start}
+          onClick={date ? cancel : start}
           label={date ? format(date, "MMM do") : "show ranking history"}
           className={date ? "" : "bg-blue-500"}
         />
+        {date && (
+          <Button label=">" className="bg-blue-500" onClick={() => skip(7)} />
+        )}
       </div>
       <Flipper flipKey={activePlayers.map(({ id }) => id).join()}>
         {activePlayers.map((player, i) => (
@@ -45,7 +59,7 @@ function PlayerList() {
           />
         ))}
         {retiredPlayers.map((player, i) => (
-          <PlayerItem key={player.id} player={player} isRetired />
+          <PlayerItem key={player.id} player={player} />
         ))}
       </Flipper>{" "}
     </Card>
@@ -56,12 +70,10 @@ function PlayerItem({
   player,
   rank,
   showBar,
-  isRetired,
 }: {
   player: RatedPlayer;
   rank?: number;
   showBar?: boolean;
-  isRetired?: boolean;
 }) {
   const { refreshPlayers, players } = useContext(DataContext);
   const [isNameEdit, setIsNameEdit] = useState(false);
@@ -99,7 +111,7 @@ function PlayerItem({
     <Flipped flipId={player.id}>
       <animated.div
         className={`border-b last:border-0 p-2 border-slate-600 flex items-center relative ${
-          isRetired ? "opacity-50" : ""
+          player.isRetired ? "opacity-50" : ""
         }`}
         style={showBar ? wrapperStyles : {}}
       >
@@ -210,7 +222,13 @@ function useTimeline(
   startDate: Date,
   interval = 800,
   shouldSkip: (date: Date) => boolean
-): { start: VoidFunction; date?: Date } {
+): {
+  start: VoidFunction;
+  cancel: VoidFunction;
+  date?: Date;
+  skip: (days: number) => void;
+  prev: (days: number) => void;
+} {
   const [date, setDate] = useState<Date>();
   const intervalRef = useRef<NodeJS.Timer>();
 
@@ -221,7 +239,7 @@ function useTimeline(
       }
       intervalRef.current = setInterval(() => {
         setDate((date) => {
-          if (isSameDay(date!, new Date())) {
+          if (isAfter(endOfDay(date!), new Date())) {
             clearInterval(intervalRef.current!);
             return undefined;
           }
@@ -234,6 +252,14 @@ function useTimeline(
       }, interval);
       setDate(endOfDay(startDate));
     },
+    cancel: () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      setDate(undefined);
+    },
+    skip: (days: number) => date && setDate(add(date, { days })),
+    prev: (days: number) => date && setDate(sub(date, { days })),
     date,
   };
 }
