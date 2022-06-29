@@ -141,17 +141,19 @@ function GameForm() {
                 ))}
             </div>
           </div>
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-around mt-4">
             <Button
               onClick={() => {
                 setIsAdding(false);
                 setWinnerTeam(["", ""]);
                 setLoserTeam(["", ""]);
               }}
+              textSize="text-base"
               label="cancel"
             />
             <Button
               className="bg-green-700"
+              textSize="text-base"
               onClick={handeSubmit}
               label="create"
             />

@@ -12,7 +12,7 @@
     "axios": "^0.24.0",
     "date-fns": "^2.28.0",
     "lodash": "^4.17.21",
-    "next": "12.0.7",
+    "next": "^12.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-flip-toolkit": "^7.0.13",
