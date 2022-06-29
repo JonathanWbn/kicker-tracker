@@ -1,26 +1,12 @@
-import { uniq } from "lodash";
-
 import { PlayerId } from "./Player";
 
 export type Team = [PlayerId, PlayerId];
 export type GameId = string;
+type Timestamp = number;
 
-export class Game implements IGame {
-  constructor(
-    public readonly id: GameId,
-    public readonly createdAt: Date,
-    public readonly winnerTeam: Team,
-    public readonly loserTeam: Team
-  ) {
-    if (uniq([...winnerTeam, ...loserTeam]).length !== 4) {
-      throw new Error("There must be four unique players.");
-    }
-  }
-}
-
-export interface IGame {
+export interface Game {
   id: GameId;
-  createdAt: Date;
+  createdAt: Timestamp;
   winnerTeam: Team;
   loserTeam: Team;
 }

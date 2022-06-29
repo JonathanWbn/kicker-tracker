@@ -6,9 +6,9 @@ import dynamic from "next/dynamic";
 import Button from "../components/button";
 import GameForm from "../components/game-form";
 import GameList from "../components/game-list";
-import { IGame } from "../domain/Game";
+import { Game } from "../domain/Game";
 import { Leaderboard } from "../domain/Leaderboard";
-import { IPlayer, PlayerId } from "../domain/Player";
+import { Player, PlayerId } from "../domain/Player";
 import { UpstashGameRepository } from "../repository/UpstashGameRepository";
 import { UpstashPlayerRepository } from "../repository/UpstashPlayerRepository";
 import Card from "../components/card";
@@ -20,14 +20,9 @@ const PlayerList = dynamic(() => import("../components/player-list"), {
   suspense: true,
 });
 
-const Home: NextPage<{ players: string; games: string }> = (props) => {
-  const [players, setPlayers] = useState<IPlayer[]>(JSON.parse(props.players));
-  const [games, setGames] = useState<IGame[]>(
-    JSON.parse(props.games).map((game: any) => ({
-      ...game,
-      createdAt: new Date(game.createdAt),
-    }))
-  );
+const Home: NextPage<{ players: Player[]; games: Game[] }> = (props) => {
+  const [players, setPlayers] = useState<Player[]>(props.players);
+  const [games, setGames] = useState<Game[]>(props.games);
   const [tab, setTab] = useState<"games" | "players">("games");
 
   function fetchPlayers() {
@@ -35,14 +30,7 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
   }
 
   function fetchGames() {
-    axios("/api/games").then(({ data }) =>
-      setGames(
-        data.map((game: IGame) => ({
-          ...game,
-          createdAt: new Date(game.createdAt),
-        }))
-      )
-    );
+    axios("/api/games").then(({ data }) => setGames(data));
   }
 
   function getPlayer(id: PlayerId) {
@@ -120,10 +108,10 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
 };
 
 export const DataContext = createContext<{
-  players: IPlayer[];
+  players: Player[];
   refreshPlayers: VoidFunction;
-  getPlayer: (id: PlayerId) => IPlayer;
-  games: IGame[];
+  getPlayer: (id: PlayerId) => Player;
+  games: Game[];
   refreshGames: VoidFunction;
   leaderboard: Leaderboard;
 }>({
@@ -146,12 +134,7 @@ export async function getServerSideProps() {
     playerRepository.listAll(),
   ]);
 
-  return {
-    props: {
-      games: JSON.stringify(games),
-      players: JSON.stringify(players),
-    },
-  };
+  return { props: { games, players } };
 }
 
 export default Home;

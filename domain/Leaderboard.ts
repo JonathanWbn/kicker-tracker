@@ -1,11 +1,11 @@
-import { Game, IGame } from "./Game";
-import { IPlayer, Player } from "./Player";
+import { Game } from "./Game";
+import { Player } from "./Player";
 
-export interface RatedPlayer extends IPlayer {
+export interface RatedPlayer extends Player {
   rating: number;
 }
 
-export interface RatedGame extends IGame {
+export interface RatedGame extends Game {
   delta: number;
 }
 
@@ -22,8 +22,8 @@ export class Leaderboard {
     }));
 
     this.games
-      .filter((game) => +game.createdAt < +date)
-      .sort((a, b) => +a.createdAt - +b.createdAt)
+      .filter((game) => game.createdAt < +date)
+      .sort((a, b) => a.createdAt - b.createdAt)
       .forEach((game) => {
         ratedPlayers = this.applyGame(game, ratedPlayers);
       });
@@ -36,8 +36,8 @@ export class Leaderboard {
       (player) => ({ ...player, rating: 1500 })
     );
 
-    const { games, players } = this.games
-      .sort((a, b) => +a.createdAt - +b.createdAt)
+    const { games } = this.games
+      .sort((a, b) => a.createdAt - b.createdAt)
       .reduce<{ games: RatedGame[]; players: RatedPlayer[] }>(
         (curr, game) => {
           const ratedPlayers = this.applyGame(game, curr.players);

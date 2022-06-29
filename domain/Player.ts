@@ -52,16 +52,7 @@ export type PlayerAnimal =
   | "hedgehog"
   | "kangaroo";
 
-export class Player implements IPlayer {
-  constructor(
-    public readonly id: PlayerId,
-    public readonly name: string,
-    public readonly animal: PlayerAnimal,
-    public readonly isRetired: boolean
-  ) {}
-}
-
-export interface IPlayer {
+export interface Player {
   id: PlayerId;
   name: string;
   animal: PlayerAnimal;

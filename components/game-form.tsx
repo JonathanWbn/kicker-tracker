@@ -2,7 +2,7 @@ import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
 
 import { DataContext } from "../pages";
-import { Game, Team } from "../domain/Game";
+import { Team } from "../domain/Game";
 import Image from "next/image";
 import { PlayerId } from "../domain/Player";
 import { uniq } from "lodash";
@@ -24,7 +24,7 @@ function GameForm() {
   const delta =
     isComplete &&
     leaderboard.getGameDelta(
-      new Game("", new Date(), winnerTeam, loserTeam),
+      { id: "", createdAt: Date.now(), winnerTeam, loserTeam },
       leaderboard.getRankedPlayers()
     );
 
@@ -78,9 +78,9 @@ function GameForm() {
       {isAdding ? (
         <>
           <div className="flex justify-between px-4 items-center border-b border-slate-500">
-            <p className="text-lg font-bold">Winner</p>
+            <p className="text-xl font-bold">Winner</p>
             {delta && <p className="text-lg">Δ {delta}</p>}
-            <p className="text-lg font-bold">Loser</p>
+            <p className="text-xl font-bold">Loser</p>
           </div>
           <div className="flex">
             <div className="flex flex-col items-start flex-grow">
