@@ -14,9 +14,9 @@ export default async function handler(
     res.status(201).json({ success: true });
   }
   if (req.method === "GET") {
-    const players = await repository.listAll();
+    const games = await repository.listAll();
 
-    res.status(200).json(players);
+    res.status(200).json(games);
   }
   res.status(500);
 }

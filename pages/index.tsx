@@ -21,16 +21,16 @@ const PlayerList = dynamic(() => import("../components/player-list"), {
 });
 
 const Home: NextPage<{ players: Player[]; games: Game[] }> = (props) => {
-  const [players, setPlayers] = useState<Player[]>(props.players);
-  const [games, setGames] = useState<Game[]>(props.games);
+  const [players, setPlayers] = useState(props.players);
+  const [games, setGames] = useState(props.games);
   const [tab, setTab] = useState<"games" | "players">("games");
 
   function fetchPlayers() {
-    axios("/api/players").then(({ data }) => setPlayers(data));
+    axios.get<Player[]>("/api/players").then(({ data }) => setPlayers(data));
   }
 
   function fetchGames() {
-    axios("/api/games").then(({ data }) => setGames(data));
+    axios.get<Game[]>("/api/games").then(({ data }) => setGames(data));
   }
 
   function getPlayer(id: PlayerId) {
