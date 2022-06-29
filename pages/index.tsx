@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { NextPage } from "next";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 import Button from "../components/button";
 import GameForm from "../components/game-form";
@@ -22,9 +22,6 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
     }))
   );
   const [tab, setTab] = useState<"games" | "players">("games");
-
-  useEffect(fetchPlayers, []);
-  useEffect(fetchGames, []);
 
   function fetchPlayers() {
     axios("/api/players").then(({ data }) => setPlayers(data));
