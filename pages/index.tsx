@@ -1,17 +1,23 @@
 import axios from "axios";
 import type { NextPage } from "next";
-import { createContext, useState } from "react";
+import { createContext, Suspense, useState } from "react";
+import dynamic from "next/dynamic";
 
 import Button from "../components/button";
 import GameForm from "../components/game-form";
 import GameList from "../components/game-list";
-import PlayerForm from "../components/player-form";
-import PlayerList from "../components/player-list";
 import { IGame } from "../domain/Game";
 import { Leaderboard } from "../domain/Leaderboard";
 import { IPlayer, PlayerId } from "../domain/Player";
 import { UpstashGameRepository } from "../repository/UpstashGameRepository";
 import { UpstashPlayerRepository } from "../repository/UpstashPlayerRepository";
+
+const PlayerForm = dynamic(() => import("../components/player-form"), {
+  suspense: true,
+});
+const PlayerList = dynamic(() => import("../components/player-list"), {
+  suspense: true,
+});
 
 const Home: NextPage<{ players: string; games: string }> = (props) => {
   const [players, setPlayers] = useState<IPlayer[]>(JSON.parse(props.players));
@@ -76,10 +82,10 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
           </>
         )}
         {tab === "players" && (
-          <>
+          <Suspense fallback={`Loading...`}>
             <PlayerList />
             <PlayerForm />
-          </>
+          </Suspense>
         )}
       </DataContext.Provider>
 
@@ -89,7 +95,7 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
           target="_blank"
           rel="noreferrer"
         >
-          {"Don't like your rating? Just change the rules!"}
+          Source
         </a>
       </div>
     </div>
