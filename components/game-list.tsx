@@ -10,7 +10,7 @@ import { RatedGame } from "../domain/Leaderboard";
 
 function GameList() {
   const { leaderboard } = useContext(DataContext);
-  const [daysShown, setDaysShown] = useState(10);
+  const [daysShown, setDaysShown] = useState(5);
 
   const gamesByDay = leaderboard.ratedGames
     .reverse()
@@ -35,7 +35,7 @@ function GameList() {
         <div className="flex justify-center">
           <Button
             className="bg-slate-600"
-            onClick={() => setDaysShown((v) => v + 10)}
+            onClick={() => setDaysShown((v) => v + 5)}
             label="show more"
           />
         </div>
