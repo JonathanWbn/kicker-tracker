@@ -11,6 +11,7 @@ import { Leaderboard } from "../domain/Leaderboard";
 import { IPlayer, PlayerId } from "../domain/Player";
 import { UpstashGameRepository } from "../repository/UpstashGameRepository";
 import { UpstashPlayerRepository } from "../repository/UpstashPlayerRepository";
+import Card from "../components/card";
 
 const PlayerForm = dynamic(() => import("../components/player-form"), {
   suspense: true,
@@ -82,7 +83,23 @@ const Home: NextPage<{ players: string; games: string }> = (props) => {
           </>
         )}
         {tab === "players" && (
-          <Suspense fallback={`Loading...`}>
+          <Suspense
+            fallback={
+              <>
+                <Card>
+                  <div className="flex justify-center mb-2">
+                    <Button
+                      label="show ranking history"
+                      className="bg-blue-500"
+                    />
+                  </div>
+                </Card>
+                <Card className="mt-2">
+                  <p className="text-center text-lg">+</p>
+                </Card>
+              </>
+            }
+          >
             <PlayerList />
             <PlayerForm />
           </Suspense>
