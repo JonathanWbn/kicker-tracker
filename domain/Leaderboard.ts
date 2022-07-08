@@ -43,7 +43,7 @@ export class Leaderboard {
           const ratedPlayers = this.applyGame(game, curr.players);
           const ratedGame: RatedGame = {
             ...game,
-            delta: this.getGameDelta(game, ratedPlayers),
+            delta: this.getGameDelta(game, curr.players),
           };
 
           return {
