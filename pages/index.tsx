@@ -46,68 +46,70 @@ const Home: NextPage = () => {
 
   return (
     <div className="bg-slate-800 px-5 pb-5 text-slate-200 min-h-screen">
-      <div className="flex py-3 justify-around">
-        <Button
-          textSize="text-base"
-          className={tab === "games" ? "bg-slate-600" : ""}
-          onClick={() => setTab("games")}
-          label="games"
-        />
-        <Button
-          textSize="text-base"
-          className={tab === "players" ? "bg-slate-600" : ""}
-          onClick={() => setTab("players")}
-          label="leaderboard"
-        />
-      </div>
-      <DataContext.Provider
-        value={{
-          players,
-          games,
-          getPlayer,
-          refresh: fetchData,
-          leaderboard: new Leaderboard(players, games),
-          isLoading,
-        }}
-      >
-        {tab === "games" && (
-          <>
-            <GameForm />
-            <GameList />
-          </>
-        )}
-        {tab === "players" && (
-          <Suspense
-            fallback={
-              <>
-                <Card>
-                  <div className="flex justify-center mb-2">
-                    <Button
-                      label="show ranking history"
-                      className="bg-blue-500"
-                    />
-                  </div>
-                </Card>
-                <Card className="mt-2">
-                  <p className="text-center text-lg">+</p>
-                </Card>
-              </>
-            }
-          >
-            <PlayerList />
-            <PlayerForm />
-          </Suspense>
-        )}
-      </DataContext.Provider>
-
-      <div className="mt-4 flex justify-center underline">
-        <a
-          href="https://github.com/JonathanWbn/kicker-tracker"
-          target="_blank"
-          rel="noreferrer"
+      <div className="w-full max-w-3xl m-auto">
+        <div className="flex py-3 justify-around">
+          <Button
+            textSize="text-base"
+            className={tab === "games" ? "bg-slate-600" : ""}
+            onClick={() => setTab("games")}
+            label="games"
+          />
+          <Button
+            textSize="text-base"
+            className={tab === "players" ? "bg-slate-600" : ""}
+            onClick={() => setTab("players")}
+            label="leaderboard"
+          />
+        </div>
+        <DataContext.Provider
+          value={{
+            players,
+            games,
+            getPlayer,
+            refresh: fetchData,
+            leaderboard: new Leaderboard(players, games),
+            isLoading,
+          }}
         >
-          Source
-        </a>
+          {tab === "games" && (
+            <>
+              <GameForm />
+              <GameList />
+            </>
+          )}
+          {tab === "players" && (
+            <Suspense
+              fallback={
+                <>
+                  <Card>
+                    <div className="flex justify-center mb-2">
+                      <Button
+                        label="show ranking history"
+                        className="bg-blue-500"
+                      />
+                    </div>
+                  </Card>
+                  <Card className="mt-2">
+                    <p className="text-center text-lg">+</p>
+                  </Card>
+                </>
+              }
+            >
+              <PlayerList />
+              <PlayerForm />
+            </Suspense>
+          )}
+        </DataContext.Provider>
+
+        <div className="mt-4 flex justify-center underline">
+          <a
+            href="https://github.com/JonathanWbn/kicker-tracker"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Source
+          </a>
+        </div>
       </div>
     </div>
   );
