@@ -1,7 +1,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { useContext, useState, Fragment } from "react";
-import { format } from "date-fns";
+import { format, sub } from "date-fns";
 
 import { DataContext } from "../pages";
 import Button from "./button";
@@ -9,7 +9,7 @@ import Card from "./card";
 import { RatedGame } from "../domain/Leaderboard";
 
 function GameList() {
-  const { leaderboard } = useContext(DataContext);
+  const { leaderboard, isLoading } = useContext(DataContext);
   const [daysShown, setDaysShown] = useState(5);
 
   const gamesByDay = leaderboard.ratedGames
@@ -18,6 +18,10 @@ function GameList() {
       const day = format(game.createdAt, "MMM do");
       return { ...games, [day]: [...(games[day] || []), game] };
     }, {});
+
+  if (isLoading) {
+    return <Skeleton />;
+  }
 
   return (
     <>
@@ -49,7 +53,7 @@ function GameItem({
 }: {
   game: RatedGame;
 }) {
-  const { getPlayer, refreshGames } = useContext(DataContext);
+  const { getPlayer, refresh } = useContext(DataContext);
   const [isDeletion, setIsDeletion] = useState(false);
 
   const [winner1, winner2] = winnerTeam.map(getPlayer);
@@ -57,7 +61,7 @@ function GameItem({
 
   async function handleDelete() {
     await axios.delete(`/api/games/${id}`);
-    refreshGames();
+    void refresh();
   }
 
   return (
@@ -116,5 +120,39 @@ function GameItem({
     </Card>
   );
 }
+
+const Skeleton = () => (
+  <>
+    {Array.from(Array(3)).map((_, i) => (
+      <Fragment key={i}>
+        <p className="text-slate-400 mt-4 mb-1">
+          {format(sub(new Date(), { days: i }), "MMM do")}
+        </p>
+        {Array.from(Array(3)).map((_, i) => (
+          <Card className="mb-2" key={i}>
+            <div className="flex items-center mb-2">
+              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
+              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
+              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
+              ,{" "}
+              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
+              <div className="grow"></div>
+              <p className="text-slate-100">±16</p>
+            </div>
+            <div className="flex items-center">
+              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
+              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
+              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
+              ,{" "}
+              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
+              <div className="grow"></div>
+              <p className="text-slate-100">±16</p>
+            </div>
+          </Card>
+        ))}
+      </Fragment>
+    ))}
+  </>
+);
 
 export default GameList;

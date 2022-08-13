@@ -75,14 +75,14 @@ function PlayerItem({
   rank?: number;
   showBar?: boolean;
 }) {
-  const { refreshPlayers, players } = useContext(DataContext);
+  const { refresh, players } = useContext(DataContext);
   const [isNameEdit, setIsNameEdit] = useState(false);
   const [isAnimalEdit, setIsAnimalEdit] = useState(false);
   const [values, setValues] = useState(player);
 
   async function handleSave() {
     await axios.post(`/api/players/${player.id}`, values);
-    refreshPlayers();
+    void refresh();
     setIsNameEdit(false);
     setIsAnimalEdit(false);
   }
@@ -96,7 +96,7 @@ function PlayerItem({
       ...values,
       isRetired: true,
     });
-    refreshPlayers();
+    void refresh();
     setIsNameEdit(false);
     setIsAnimalEdit(false);
   }

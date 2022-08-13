@@ -10,7 +10,7 @@ import Button from "./button";
 import Card from "./card";
 
 function GameForm() {
-  const { refreshGames, leaderboard } = useContext(DataContext);
+  const { refresh, leaderboard } = useContext(DataContext);
   const [isAdding, setIsAdding] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState<Team>(["", ""]);
   const [loserTeam, setLoserTeam] = useState<Team>(["", ""]);
@@ -37,7 +37,7 @@ function GameForm() {
       winnerTeam: [winner1, winner2],
       loserTeam: [loser1, loser2],
     });
-    refreshGames();
+    void refresh();
     setLoserTeam(["", ""]);
     setWinnerTeam(["", ""]);
     setIsAdding(false);

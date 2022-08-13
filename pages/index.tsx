@@ -1,6 +1,6 @@
 import axios from "axios";
 import type { NextPage } from "next";
-import { createContext, Suspense, useState } from "react";
+import { createContext, Suspense, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 import Button from "../components/button";
@@ -9,8 +9,6 @@ import GameList from "../components/game-list";
 import { Game } from "../domain/Game";
 import { Leaderboard } from "../domain/Leaderboard";
 import { Player, PlayerId } from "../domain/Player";
-import { UpstashGameRepository } from "../repository/UpstashGameRepository";
-import { UpstashPlayerRepository } from "../repository/UpstashPlayerRepository";
 import Card from "../components/card";
 
 const PlayerForm = dynamic(() => import("../components/player-form"), {
@@ -20,17 +18,25 @@ const PlayerList = dynamic(() => import("../components/player-list"), {
   suspense: true,
 });
 
-const Home: NextPage<{ players: Player[]; games: Game[] }> = (props) => {
-  const [players, setPlayers] = useState(props.players);
-  const [games, setGames] = useState(props.games);
+const Home: NextPage = () => {
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [tab, setTab] = useState<"games" | "players">("games");
 
-  function fetchPlayers() {
-    axios.get<Player[]>("/api/players").then(({ data }) => setPlayers(data));
-  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  function fetchGames() {
-    axios.get<Game[]>("/api/games").then(({ data }) => setGames(data));
+  async function fetchData() {
+    const [{ data: players }, { data: games }] = await Promise.all([
+      axios.get<Player[]>("/api/players"),
+      axios.get<Game[]>("/api/games"),
+    ]);
+
+    setIsLoading(false);
+    setPlayers(players);
+    setGames(games);
   }
 
   function getPlayer(id: PlayerId) {
@@ -57,11 +63,11 @@ const Home: NextPage<{ players: Player[]; games: Game[] }> = (props) => {
       <DataContext.Provider
         value={{
           players,
-          refreshPlayers: fetchPlayers,
-          getPlayer,
           games,
-          refreshGames: fetchGames,
+          getPlayer,
+          refresh: fetchData,
           leaderboard: new Leaderboard(players, games),
+          isLoading,
         }}
       >
         {tab === "games" && (
@@ -109,32 +115,20 @@ const Home: NextPage<{ players: Player[]; games: Game[] }> = (props) => {
 
 export const DataContext = createContext<{
   players: Player[];
-  refreshPlayers: VoidFunction;
-  getPlayer: (id: PlayerId) => Player;
   games: Game[];
-  refreshGames: VoidFunction;
+  getPlayer: (id: PlayerId) => Player;
+  refresh: VoidFunction;
   leaderboard: Leaderboard;
+  isLoading: boolean;
 }>({
   players: [],
-  refreshPlayers: () => {},
+  games: [],
   getPlayer: () => {
     throw new Error("No player found.");
   },
-  games: [],
-  refreshGames: () => {},
+  refresh: () => {},
   leaderboard: new Leaderboard([], []),
+  isLoading: true,
 });
-
-export async function getServerSideProps() {
-  const gameRepository = new UpstashGameRepository();
-  const playerRepository = new UpstashPlayerRepository();
-
-  const [games, players] = await Promise.all([
-    gameRepository.listAll(),
-    playerRepository.listAll(),
-  ]);
-
-  return { props: { games, players } };
-}
 
 export default Home;

@@ -9,7 +9,7 @@ import Button from "./button";
 import Card from "./card";
 
 function PlayerForm() {
-  const { refreshPlayers, players } = useContext(DataContext);
+  const { refresh, players } = useContext(DataContext);
   const [isAdding, setIsAdding] = useState(false);
   const [name, setName] = useState("");
   const [animal, setAnimal] = useState<PlayerAnimal | "">("");
@@ -21,7 +21,7 @@ function PlayerForm() {
 
     e.preventDefault();
     await axios.post("/api/players", { name, animal });
-    refreshPlayers();
+    void refresh();
     setName("");
     setIsAdding(false);
   }
