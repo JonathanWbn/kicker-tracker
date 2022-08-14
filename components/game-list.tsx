@@ -78,39 +78,49 @@ function GameItem({
       ) : (
         <>
           <div className="flex items-center mb-2">
-            <Image
-              src={`/animals/${winner1.animal}.png`}
-              alt={winner1.animal}
-              width={24}
-              height={24}
-            />
-            <Image
-              src={`/animals/${winner2.animal}.png`}
-              alt={winner2.animal}
-              width={24}
-              height={24}
-            />
+            <div className="h-6 w-12 flex justify-center">
+              <Image
+                src={`/animals/${winner1.animal}.png`}
+                alt={winner1.animal}
+                width={24}
+                height={24}
+              />
+              {winner2.id !== "placeholder" && (
+                <Image
+                  src={`/animals/${winner2.animal}.png`}
+                  alt={winner2.animal}
+                  width={24}
+                  height={24}
+                />
+              )}
+            </div>
             <p className="font-bold ml-2">
-              {winner1.name}, {winner2.name}
+              {winner1.name}
+              {winner2.name ? `, ${winner2.name}` : ""}
             </p>
             <div className="grow"></div>
             <p className="text-green-400">+{delta}</p>
           </div>
           <div className="flex items-center">
-            <Image
-              src={`/animals/${loser1.animal}.png`}
-              alt={loser1.animal}
-              width={24}
-              height={24}
-            />
-            <Image
-              src={`/animals/${loser2.animal}.png`}
-              alt={loser2.animal}
-              width={24}
-              height={24}
-            />
+            <div className="h-6 w-12 flex justify-center">
+              <Image
+                src={`/animals/${loser1.animal}.png`}
+                alt={loser1.animal}
+                width={24}
+                height={24}
+              />
+              {loser2.id !== "placeholder" && (
+                <Image
+                  src={`/animals/${loser2.animal}.png`}
+                  alt={loser2.animal}
+                  width={24}
+                  height={24}
+                />
+              )}
+            </div>
             <p className="ml-2">
-              {loser1.name}, {loser2.name}
+              {loser1.name}
+              {loser2.name ? `, ${loser2.name}` : ""}
             </p>
             <div className="grow"></div>
             <p className="text-red-400">-{delta}</p>

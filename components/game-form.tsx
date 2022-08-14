@@ -19,7 +19,12 @@ function GameForm() {
   const [loser1, loser2] = loserTeam;
 
   const isComplete =
-    uniq([...winnerTeam, ...loserTeam].filter(Boolean)).length === 4;
+    ((winnerTeam.filter(Boolean).length === 1 &&
+      loserTeam.filter(Boolean).length === 1) ||
+      (winnerTeam.filter(Boolean).length === 2 &&
+        loserTeam.filter(Boolean).length === 2)) &&
+    uniq([...winnerTeam, ...loserTeam].filter(Boolean)).length ===
+      [...winnerTeam, ...loserTeam].filter(Boolean).length;
 
   const delta =
     isComplete &&

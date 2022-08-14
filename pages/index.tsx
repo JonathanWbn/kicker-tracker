@@ -39,9 +39,11 @@ const Home: NextPage = () => {
     setGames(games);
   }
 
-  function getPlayer(id: PlayerId) {
+  function getPlayer(id: PlayerId | undefined) {
     const player = players?.find((el) => el.id === id);
-    return player || { id: "", name: "", animal: "bat", isRetired: false };
+    return (
+      player || { id: "placeholder", name: "", animal: "bat", isRetired: false }
+    );
   }
 
   return (
@@ -118,7 +120,7 @@ const Home: NextPage = () => {
 export const DataContext = createContext<{
   players: Player[];
   games: Game[];
-  getPlayer: (id: PlayerId) => Player;
+  getPlayer: (id: PlayerId | undefined) => Player;
   refresh: VoidFunction;
   leaderboard: Leaderboard;
   isLoading: boolean;

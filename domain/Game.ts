@@ -1,6 +1,6 @@
 import { PlayerId } from "./Player";
 
-export type Team = [PlayerId, PlayerId];
+export type Team = [PlayerId, PlayerId | undefined];
 export type GameId = string;
 type Timestamp = number;
 

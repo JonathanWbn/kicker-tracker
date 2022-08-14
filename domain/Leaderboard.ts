@@ -76,24 +76,34 @@ export class Leaderboard {
   }
 
   public getGameDelta(game: Game, ratedPlayers: RatedPlayer[]): number {
-    const ratingWinner1 = ratedPlayers.find(
+    const winner1 = ratedPlayers.find(
       (player) => game.winnerTeam[0] === player.id
-    )!.rating;
-    const ratingWinner2 = ratedPlayers.find(
+    );
+    const winner2 = ratedPlayers.find(
       (player) => game.winnerTeam[1] === player.id
-    )!.rating;
-    const ratingLoser1 = ratedPlayers.find(
+    );
+    const loser1 = ratedPlayers.find(
       (player) => game.loserTeam[0] === player.id
-    )!.rating;
-    const ratingLoser2 = ratedPlayers.find(
+    );
+    const loser2 = ratedPlayers.find(
       (player) => game.loserTeam[1] === player.id
-    )!.rating;
+    );
 
-    const avgRatingWinner = (ratingWinner1 + ratingWinner2) / 2;
-    const avgRatingLoser = (ratingLoser1 + ratingLoser2) / 2;
+    const ratingWinnerTeam =
+      winner1 && winner2
+        ? (winner1.rating + winner2.rating) / 2
+        : winner1
+        ? winner1.rating
+        : 1500;
+    const ratingLoserTeam =
+      loser1 && loser2
+        ? (loser1.rating + loser2.rating) / 2
+        : loser1
+        ? loser1.rating
+        : 1500;
 
     const winnerChanceToWin =
-      1 / (1 + Math.pow(10, (avgRatingLoser - avgRatingWinner) / 400));
+      1 / (1 + Math.pow(10, (ratingLoserTeam - ratingWinnerTeam) / 400));
     const delta = Math.round(32 * (1 - winnerChanceToWin));
 
     return delta;
