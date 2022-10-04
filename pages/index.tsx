@@ -85,10 +85,7 @@ const Home: NextPage = () => {
                 <>
                   <Card>
                     <div className="flex justify-center mb-2">
-                      <Button
-                        label="show ranking history"
-                        className="bg-blue-500"
-                      />
+                      <Button label="show history" className="bg-blue-500" />
                     </div>
                   </Card>
                   <Card className="mt-2">

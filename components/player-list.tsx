@@ -21,7 +21,7 @@ import {
 import { partition } from "lodash";
 
 function PlayerList() {
-  const { leaderboard } = useContext(DataContext);
+  const { leaderboard, games } = useContext(DataContext);
   const { start, date, prev, skip, cancel } = useTimeline(
     sub(leaderboard.ratedGames[0].createdAt, { days: 1 }),
     800,
@@ -42,7 +42,11 @@ function PlayerList() {
         )}
         <Button
           onClick={date ? cancel : start}
-          label={date ? format(date, "MMM do") : "show ranking history"}
+          label={
+            date
+              ? format(date, "MMM do")
+              : `show history (${games.length} games)`
+          }
           className={date ? "" : "bg-blue-500"}
         />
         {date && (
