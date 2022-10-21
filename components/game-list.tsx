@@ -7,6 +7,7 @@ import { DataContext } from "../pages";
 import Button from "./button";
 import Card from "./card";
 import { RatedGame } from "../domain/Leaderboard";
+import { PlayerDeltaPills } from "./player-delta-pills";
 
 function GameList() {
   const { leaderboard, isLoading } = useContext(DataContext);
@@ -29,7 +30,8 @@ function GameList() {
         .slice(0, daysShown)
         .map(([day, games]) => (
           <Fragment key={day}>
-            <p className="text-slate-400 mt-4 mb-1">{day}</p>
+            <p className="text-slate-400 mt-4">{day}</p>
+            <PlayerDeltaPills games={games} />
             {games.map((game) => (
               <GameItem key={game.id} game={game} />
             ))}
