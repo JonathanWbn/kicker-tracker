@@ -35,7 +35,13 @@ export const PlayerDeltaPills = ({ games }: { games: RatedGame[] }) => {
               height={20}
             />
             <div
-              className={`ml-1 text-xs text-${delta > 0 ? "green" : "red"}-400`}
+              className={`ml-1 text-xs ${
+                delta > 0
+                  ? "text-green-400"
+                  : delta < 0
+                  ? "text-red-400"
+                  : "text-slate-300"
+              }`}
             >
               {delta > 0 ? "+" : ""}
               {delta}
