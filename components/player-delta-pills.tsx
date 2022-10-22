@@ -51,3 +51,16 @@ export const PlayerDeltaPills = ({ games }: { games: RatedGame[] }) => {
     </div>
   );
 };
+
+export const PlayerDeltaPillsSkeleton = () => {
+  return (
+    <div className="flex flex-wrap mb-1">
+      {[...Array(5)].map((_, i) => (
+        <Pill key={i} className="flex items-center mb-1 mr-1">
+          <div className="w-5 h-5 bg-slate-600 rounded-full animate-pulse" />
+          <div className="ml-1 text-xs text-slate-300 animate-pulse">±16</div>
+        </Pill>
+      ))}
+    </div>
+  );
+};

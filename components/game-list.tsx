@@ -7,7 +7,10 @@ import { DataContext } from "../pages";
 import Button from "./button";
 import Card from "./card";
 import { RatedGame } from "../domain/Leaderboard";
-import { PlayerDeltaPills } from "./player-delta-pills";
+import {
+  PlayerDeltaPills,
+  PlayerDeltaPillsSkeleton,
+} from "./player-delta-pills";
 
 function GameList() {
   const { leaderboard, isLoading } = useContext(DataContext);
@@ -137,26 +140,25 @@ const Skeleton = () => (
   <>
     {Array.from(Array(3)).map((_, i) => (
       <Fragment key={i}>
-        <p className="text-slate-400 mt-4 mb-1">
+        <p className="text-slate-400 mt-4">
           {format(sub(new Date(), { days: i }), "MMM do")}
         </p>
+        <PlayerDeltaPillsSkeleton />
         {Array.from(Array(3)).map((_, i) => (
           <Card className="mb-2" key={i}>
-            <div className="flex items-center mb-2">
-              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
-              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
-              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
-              ,{" "}
-              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
+            <div className="flex items-center mb-2 animate-pulse">
+              <div className="bg-slate-500 rounded-full w-6 h-6"></div>
+              <div className="bg-slate-500 rounded-full w-6 h-6"></div>
+              <div className="ml-2 bg-slate-500 w-20 h-5 rounded"></div>,{" "}
+              <div className="ml-2 bg-slate-500 w-20 h-5 rounded"></div>
               <div className="grow"></div>
               <p className="text-slate-100">±16</p>
             </div>
-            <div className="flex items-center">
-              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
-              <div className="bg-slate-100 rounded-full w-6 h-6 opacity-50"></div>
-              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
-              ,{" "}
-              <div className="ml-2 bg-slate-100 w-20 h-5 rounded opacity-50"></div>
+            <div className="flex items-center animate-pulse">
+              <div className="bg-slate-500 rounded-full w-6 h-6"></div>
+              <div className="bg-slate-500 rounded-full w-6 h-6"></div>
+              <div className="ml-2 bg-slate-500 w-20 h-5 rounded"></div>,{" "}
+              <div className="ml-2 bg-slate-500 w-20 h-5 rounded"></div>
               <div className="grow"></div>
               <p className="text-slate-100">±16</p>
             </div>
