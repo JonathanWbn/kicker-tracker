@@ -105,6 +105,16 @@ function PlayerItem({
     setIsAnimalEdit(false);
   }
 
+  async function handleComeback() {
+    await axios.post(`/api/players/${player.id}`, {
+      ...values,
+      isRetired: false,
+    });
+    void refresh();
+    setIsNameEdit(false);
+    setIsAnimalEdit(false);
+  }
+
   const percentage = (player.rating / 3000) * 100;
   const imageStyles = useSpring({ marginLeft: `${percentage}%` });
   const wrapperStyles = useSpring({
@@ -173,7 +183,11 @@ function PlayerItem({
                 ))}
             </div>
             <div className="flex justify-around">
-              <Button onClick={handleRetirement} label="Retire" />
+              {player.isRetired ? (
+                <Button onClick={handleComeback} label="Come back" />
+              ) : (
+                <Button onClick={handleRetirement} label="Retire" />
+              )}
               <Button onClick={handleSave} label="Save" />
             </div>
           </div>
