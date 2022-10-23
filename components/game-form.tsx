@@ -8,10 +8,12 @@ import { PlayerId } from "../domain/Player";
 import { uniq } from "lodash";
 import Button from "./button";
 import Card from "./card";
+import TournamentForm from "./tournament-form";
 
 function GameForm() {
   const { refresh, leaderboard } = useContext(DataContext);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAddingGame, setIsAddingGame] = useState(false);
+  const [isAddingTournament, setIsAddingTournament] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState<Team>(["", ""]);
   const [loserTeam, setLoserTeam] = useState<Team>(["", ""]);
 
@@ -45,7 +47,7 @@ function GameForm() {
     void refresh();
     setLoserTeam(["", ""]);
     setWinnerTeam(["", ""]);
-    setIsAdding(false);
+    setIsAddingGame(false);
   }
 
   function handleWinnerSelect(playerId: PlayerId) {
@@ -78,97 +80,107 @@ function GameForm() {
     }
   }
 
-  return (
-    <Card isActive={isAdding} onClick={() => !isAdding && setIsAdding(true)}>
-      {isAdding ? (
-        <>
-          <div className="flex justify-between px-4 items-center border-b border-slate-500">
-            <p className="text-xl font-bold">Winner</p>
-            {delta && <p className="text-lg">Δ {delta}</p>}
-            <p className="text-xl font-bold">Loser</p>
-          </div>
-          <div className="flex">
-            <div className="flex flex-col items-start flex-grow">
-              {leaderboard
-                .getRankedPlayers()
-                .filter((player) => !player.isRetired)
-                .map((player) => (
-                  <Button
-                    key={player.id}
-                    textSize="text-base"
-                    backgroundColor={
-                      winnerTeam.includes(player.id)
-                        ? "bg-slate-500"
-                        : undefined
-                    }
-                    className="mt-1 flex items-center normal-case"
-                    onClick={() => handleWinnerSelect(player.id)}
-                  >
-                    <Image
-                      src={`/animals/${player.animal}.png`}
-                      alt={player.animal}
-                      width={24}
-                      height={24}
-                    />
-                    <span className="ml-2">{player.name}</span>
-                  </Button>
-                ))}
-            </div>
-            <div className="flex flex-col items-end">
-              {leaderboard
-                .getRankedPlayers()
-                .filter((player) => !player.isRetired)
-                .map((player) => (
-                  <Button
-                    key={player.id}
-                    textSize="text-base"
-                    backgroundColor={
-                      loserTeam.includes(player.id) &&
-                      winnerTeam.includes(player.id)
-                        ? "bg-red-400"
-                        : loserTeam.includes(player.id)
-                        ? "bg-slate-500"
-                        : undefined
-                    }
-                    className="mt-1 flex justify-end items-center normal-case"
-                    onClick={() => handleLoserSelect(player.id)}
-                  >
-                    <span className="mr-2">{player.name}</span>
-                    <Image
-                      src={`/animals/${player.animal}.png`}
-                      alt={player.animal}
-                      width={24}
-                      height={24}
-                    />
-                  </Button>
-                ))}
-            </div>
-          </div>
-          <div className="flex justify-around mt-4">
-            <Button
-              onClick={() => {
-                setIsAdding(false);
-                setWinnerTeam(["", ""]);
-                setLoserTeam(["", ""]);
-              }}
-              textSize="text-base"
-              backgroundColor="bg-slate-700"
-            >
-              cancel
-            </Button>
-            <Button
-              backgroundColor="bg-green-700"
-              textSize="text-base"
-              onClick={handeSubmit}
-            >
-              create
-            </Button>
-          </div>
-        </>
-      ) : (
-        <p className="text-center text-lg">+</p>
-      )}
+  return isAddingTournament ? (
+    <TournamentForm onClose={() => setIsAddingTournament(false)} />
+  ) : isAddingGame ? (
+    <Card isActive>
+      <h1 className="text-xl text-center font-bold">New Game ⚽</h1>
+      <div className="flex justify-between px-4 items-center border-b border-slate-500">
+        <p className="text-xl ">Winner</p>
+        {delta && <p className="text-lg">Δ {delta}</p>}
+        <p className="text-xl">Loser</p>
+      </div>
+      <div className="flex">
+        <div className="flex flex-col items-start flex-grow">
+          {leaderboard
+            .getRankedPlayers()
+            .filter((player) => !player.isRetired)
+            .map((player) => (
+              <Button
+                key={player.id}
+                textSize="text-base"
+                backgroundColor={
+                  winnerTeam.includes(player.id) ? "bg-slate-500" : undefined
+                }
+                className="mt-1 flex items-center normal-case"
+                onClick={() => handleWinnerSelect(player.id)}
+              >
+                <Image
+                  src={`/animals/${player.animal}.png`}
+                  alt={player.animal}
+                  width={24}
+                  height={24}
+                />
+                <span className="ml-2">{player.name}</span>
+              </Button>
+            ))}
+        </div>
+        <div className="flex flex-col items-end">
+          {leaderboard
+            .getRankedPlayers()
+            .filter((player) => !player.isRetired)
+            .map((player) => (
+              <Button
+                key={player.id}
+                textSize="text-base"
+                backgroundColor={
+                  loserTeam.includes(player.id) &&
+                  winnerTeam.includes(player.id)
+                    ? "bg-red-400"
+                    : loserTeam.includes(player.id)
+                    ? "bg-slate-500"
+                    : undefined
+                }
+                className="mt-1 flex justify-end items-center normal-case"
+                onClick={() => handleLoserSelect(player.id)}
+              >
+                <span className="mr-2">{player.name}</span>
+                <Image
+                  src={`/animals/${player.animal}.png`}
+                  alt={player.animal}
+                  width={24}
+                  height={24}
+                />
+              </Button>
+            ))}
+        </div>
+      </div>
+      <div className="flex justify-around mt-4">
+        <Button
+          onClick={() => {
+            setIsAddingGame(false);
+            setWinnerTeam(["", ""]);
+            setLoserTeam(["", ""]);
+          }}
+          textSize="text-base"
+          backgroundColor="bg-slate-700"
+        >
+          cancel
+        </Button>
+        <Button
+          backgroundColor="bg-green-700"
+          textSize="text-base"
+          onClick={handeSubmit}
+        >
+          create
+        </Button>
+      </div>
     </Card>
+  ) : (
+    <div className="flex mt-2">
+      <Card
+        className="basis-1/2 mr-4 text-center cursor-pointer opacity-50"
+        onClick={() => window.alert("Launching November 4th.")}
+      >
+        🏆
+      </Card>
+      <Card
+        onClick={() => setIsAddingGame(true)}
+        className="basis-1/2 text-center cursor-pointer"
+      >
+        ⚽
+      </Card>
+    </div>
   );
 }
 
