@@ -96,22 +96,22 @@ function GameForm() {
                   <Button
                     key={player.id}
                     textSize="text-base"
-                    className={`mt-1 flex items-center ${
-                      winnerTeam.includes(player.id) ? "bg-slate-500" : ""
-                    }`}
-                    onClick={() => handleWinnerSelect(player.id)}
-                    label={
-                      <>
-                        <Image
-                          src={`/animals/${player.animal}.png`}
-                          alt={player.animal}
-                          width={24}
-                          height={24}
-                        />
-                        <span className="ml-2">{player.name}</span>
-                      </>
+                    backgroundColor={
+                      winnerTeam.includes(player.id)
+                        ? "bg-slate-500"
+                        : undefined
                     }
-                  ></Button>
+                    className="mt-1 flex items-center normal-case"
+                    onClick={() => handleWinnerSelect(player.id)}
+                  >
+                    <Image
+                      src={`/animals/${player.animal}.png`}
+                      alt={player.animal}
+                      width={24}
+                      height={24}
+                    />
+                    <span className="ml-2">{player.name}</span>
+                  </Button>
                 ))}
             </div>
             <div className="flex flex-col items-end">
@@ -122,27 +122,25 @@ function GameForm() {
                   <Button
                     key={player.id}
                     textSize="text-base"
-                    className={`mt-1 flex justify-end items-center ${
-                      loserTeam.includes(player.id) ? "bg-slate-500" : ""
-                    } ${
+                    backgroundColor={
                       loserTeam.includes(player.id) &&
                       winnerTeam.includes(player.id)
                         ? "bg-red-400"
-                        : ""
-                    }`}
-                    onClick={() => handleLoserSelect(player.id)}
-                    label={
-                      <>
-                        <span className="mr-2">{player.name}</span>
-                        <Image
-                          src={`/animals/${player.animal}.png`}
-                          alt={player.animal}
-                          width={24}
-                          height={24}
-                        />
-                      </>
+                        : loserTeam.includes(player.id)
+                        ? "bg-slate-500"
+                        : undefined
                     }
-                  ></Button>
+                    className="mt-1 flex justify-end items-center normal-case"
+                    onClick={() => handleLoserSelect(player.id)}
+                  >
+                    <span className="mr-2">{player.name}</span>
+                    <Image
+                      src={`/animals/${player.animal}.png`}
+                      alt={player.animal}
+                      width={24}
+                      height={24}
+                    />
+                  </Button>
                 ))}
             </div>
           </div>
@@ -154,14 +152,17 @@ function GameForm() {
                 setLoserTeam(["", ""]);
               }}
               textSize="text-base"
-              label="cancel"
-            />
+              backgroundColor="bg-slate-700"
+            >
+              cancel
+            </Button>
             <Button
-              className="bg-green-700"
+              backgroundColor="bg-green-700"
               textSize="text-base"
               onClick={handeSubmit}
-              label="create"
-            />
+            >
+              create
+            </Button>
           </div>
         </>
       ) : (

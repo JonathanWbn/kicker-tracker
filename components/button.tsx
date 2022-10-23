@@ -1,25 +1,45 @@
-import { ReactNode } from "react";
-
 interface ButtonProps
   extends React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  label: ReactNode;
-  textSize?: string;
+  textSize?: TextSize;
+  backgroundColor?: BackgroundColor;
 }
 
 function Button({
-  label,
   textSize = "text-xs",
-  className = "bg-slate-700",
+  backgroundColor,
+  className,
   ...props
 }: ButtonProps) {
   return (
-    <button {...props} className={`${textSize} rounded px-4 py-2 ${className}`}>
-      {typeof label === "string" ? label.toUpperCase() : label}
-    </button>
+    <button
+      {...props}
+      className={`uppercase rounded px-4 py-2 ${[
+        textSize,
+        backgroundColor,
+        className,
+      ].join(" ")}`}
+    />
   );
 }
 
 export default Button;
+
+type TextSize = `text-${
+  | "xs"
+  | "sm"
+  | "base"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "6xl"
+  | "7xl"
+  | "8xl"
+  | "9xl"}`;
+
+type BackgroundColor = `bg-${string}`;

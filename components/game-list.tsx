@@ -43,10 +43,11 @@ function GameList() {
       {daysShown < Object.keys(gamesByDay).length && (
         <div className="flex justify-center">
           <Button
-            className="bg-slate-600"
+            backgroundColor="bg-slate-600"
             onClick={() => setDaysShown((v) => v + 5)}
-            label="show more"
-          />
+          >
+            show more
+          </Button>
         </div>
       )}
     </>
@@ -73,12 +74,10 @@ function GameItem({
     <Card className="mb-2" onClick={() => !isDeletion && setIsDeletion(true)}>
       {isDeletion ? (
         <div className="flex justify-around">
-          <Button onClick={() => setIsDeletion(false)} label="cancel" />
-          <Button
-            className="bg-red-700"
-            onClick={handleDelete}
-            label="delete"
-          />
+          <Button onClick={() => setIsDeletion(false)}>cancel</Button>
+          <Button backgroundColor="bg-red-700" onClick={handleDelete}>
+            delete
+          </Button>
         </div>
       ) : (
         <>

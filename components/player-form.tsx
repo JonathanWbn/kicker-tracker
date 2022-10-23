@@ -68,12 +68,10 @@ function PlayerForm() {
             ) : (
               <span className="flex-grow" />
             )}
-            <Button onClick={() => setIsAdding(false)} label="cancel" />
-            <Button
-              className="bg-green-700"
-              onClick={handeSubmit}
-              label="create"
-            />
+            <Button onClick={() => setIsAdding(false)}>cancel</Button>
+            <Button backgroundColor="bg-green-700" onClick={handeSubmit}>
+              create
+            </Button>
           </div>
         </>
       ) : (

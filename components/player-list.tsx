@@ -38,19 +38,22 @@ function PlayerList() {
     <Card>
       <div className="flex justify-center mb-2">
         {date && (
-          <Button label="<" className="bg-blue-500" onClick={() => prev(7)} />
+          <Button backgroundColor="bg-blue-500" onClick={() => prev(7)}>
+            {"<"}
+          </Button>
         )}
         <Button
           onClick={date ? cancel : start}
-          label={
-            date
-              ? format(date, "MMM do")
-              : `show history (${games.length} games)`
-          }
-          className={date ? "" : "bg-blue-500"}
-        />
+          backgroundColor={!date ? "bg-blue-500" : undefined}
+        >
+          {date
+            ? format(date, "MMM do")
+            : `show history (${games.length} games)`}
+        </Button>
         {date && (
-          <Button label=">" className="bg-blue-500" onClick={() => skip(7)} />
+          <Button backgroundColor="bg-blue-500" onClick={() => skip(7)}>
+            {">"}
+          </Button>
         )}
       </div>
       <Flipper flipKey={activePlayers.map(({ id }) => id).join()}>
@@ -184,11 +187,11 @@ function PlayerItem({
             </div>
             <div className="flex justify-around">
               {player.isRetired ? (
-                <Button onClick={handleComeback} label="Come back" />
+                <Button onClick={handleComeback}>come back</Button>
               ) : (
-                <Button onClick={handleRetirement} label="Retire" />
+                <Button onClick={handleRetirement}>retire</Button>
               )}
-              <Button onClick={handleSave} label="Save" />
+              <Button onClick={handleSave}>save</Button>
             </div>
           </div>
         ) : (
@@ -212,11 +215,9 @@ function PlayerItem({
                     setValues({ ...values, name: e.target.value })
                   }
                 ></input>
-                <Button
-                  onClick={handleSave}
-                  label="Save"
-                  className="px-1 py-0"
-                />
+                <Button onClick={handleSave} className="px-1 py-0">
+                  save
+                </Button>
               </div>
             ) : (
               <>

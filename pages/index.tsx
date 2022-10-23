@@ -52,16 +52,18 @@ const Home: NextPage = () => {
         <div className="flex py-3 justify-around">
           <Button
             textSize="text-base"
-            className={tab === "games" ? "bg-slate-600" : ""}
+            backgroundColor={tab === "games" ? "bg-slate-600" : undefined}
             onClick={() => setTab("games")}
-            label="games"
-          />
+          >
+            games
+          </Button>
           <Button
             textSize="text-base"
-            className={tab === "players" ? "bg-slate-600" : ""}
+            backgroundColor={tab === "players" ? "bg-slate-600" : undefined}
             onClick={() => setTab("players")}
-            label="leaderboard"
-          />
+          >
+            leaderboard
+          </Button>
         </div>
         <DataContext.Provider
           value={{
@@ -85,7 +87,9 @@ const Home: NextPage = () => {
                 <>
                   <Card>
                     <div className="flex justify-center mb-2">
-                      <Button label="show history" className="bg-blue-500" />
+                      <Button backgroundColor="bg-blue-500">
+                        show history
+                      </Button>
                     </div>
                   </Card>
                   <Card className="mt-2">
