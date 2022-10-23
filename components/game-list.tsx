@@ -19,7 +19,7 @@ function GameList() {
   const gamesByDay = leaderboard.ratedGames
     .reverse()
     .reduce<Record<string, RatedGame[]>>((games, game) => {
-      const day = format(game.createdAt, "MMM do");
+      const day = format(game.createdAt, "eeee, MMM do");
       return { ...games, [day]: [...(games[day] || []), game] };
     }, {});
 
@@ -140,7 +140,7 @@ const Skeleton = () => (
     {Array.from(Array(3)).map((_, i) => (
       <Fragment key={i}>
         <p className="text-slate-400 mt-4">
-          {format(sub(new Date(), { days: i }), "MMM do")}
+          {format(sub(new Date(), { days: i }), "eeee, MMM do")}
         </p>
         <PlayerDeltaPillsSkeleton />
         {Array.from(Array(3)).map((_, i) => (
