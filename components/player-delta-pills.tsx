@@ -27,7 +27,11 @@ export const PlayerDeltaPills = ({ games }: { games: RatedGame[] }) => {
       {Object.entries(players)
         .sort(([, a], [, b]) => b - a)
         .map(([player, delta]) => (
-          <Pill key={player} className="flex items-center mb-1 mr-1">
+          <Pill
+            key={player}
+            className="flex items-center mb-1 mr-1"
+            tooltip={getPlayer(player).name}
+          >
             <Image
               src={`/animals/${getPlayer(player).animal}.png`}
               alt={getPlayer(player).animal}
