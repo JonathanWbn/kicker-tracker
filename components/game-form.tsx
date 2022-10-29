@@ -1,7 +1,6 @@
 import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
 
-import { DataContext } from "../pages";
 import { Team } from "../domain/Game";
 import Image from "next/image";
 import { PlayerId } from "../domain/Player";
@@ -9,6 +8,7 @@ import { uniq } from "lodash";
 import Button from "./button";
 import Card from "./card";
 import TournamentForm from "./tournament-form";
+import { DataContext } from "../data";
 
 function GameForm() {
   const { refresh, leaderboard } = useContext(DataContext);

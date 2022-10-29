@@ -3,7 +3,7 @@ import { RatedPlayer } from "../domain/Leaderboard";
 import { animated, useSpring } from "react-spring";
 import Image from "next/image";
 
-import { DataContext } from "../pages";
+import { DataContext } from "../data";
 import axios from "axios";
 import { animals } from "../domain/Player";
 import Button from "./button";

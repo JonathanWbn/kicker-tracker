@@ -1,7 +1,7 @@
 import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
 
-import { DataContext } from "../pages";
+import { DataContext } from "../data";
 import { animals, PlayerAnimal } from "../domain/Player";
 import Image from "next/image";
 import { upperFirst } from "lodash";

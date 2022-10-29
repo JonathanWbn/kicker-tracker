@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useContext, useState, Fragment } from "react";
 import { format, sub } from "date-fns";
 
-import { DataContext } from "../pages";
+import { DataContext } from "../data";
 import Button from "./button";
 import Card from "./card";
 import { RatedGame } from "../domain/Leaderboard";

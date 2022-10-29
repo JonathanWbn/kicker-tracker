@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useContext } from "react";
 import { RatedGame } from "../domain/Leaderboard";
-import { DataContext } from "../pages";
+import { DataContext } from "../data";
 import Pill from "./pill";
 
 export const PlayerDeltaPills = ({ games }: { games: RatedGame[] }) => {
