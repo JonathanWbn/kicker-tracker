@@ -1,7 +1,6 @@
 "use client";
 
 import axios from "axios";
-import type { NextPage } from "next";
 import { Suspense, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
@@ -21,7 +20,7 @@ const PlayerList = dynamic(() => import("../components/player-list"), {
   suspense: true,
 });
 
-const Home: NextPage = () => {
+export default function Page() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [games, setGames] = useState<Game[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -119,6 +118,4 @@ const Home: NextPage = () => {
       </div>
     </div>
   );
-};
-
-export default Home;
+}
