@@ -1,25 +1,37 @@
 import Image from "next/image";
 import { useContext } from "react";
-import { RatedGame } from "../domain/Leaderboard";
+import { Leaderboard, LeaderboardEvent } from "../domain/Leaderboard";
 import { DataContext } from "../data";
 import Pill from "./pill";
 
-export const PlayerDeltaPills = ({ games }: { games: RatedGame[] }) => {
+export const PlayerDeltaPills = ({
+  events,
+}: {
+  events: LeaderboardEvent[];
+}) => {
   const { getPlayer } = useContext(DataContext);
 
   const players: Record<string, number> = {};
 
-  games.forEach((game) => {
-    game.winnerTeam.forEach((player) => {
-      if (player) {
-        players[player] = (players[player] || 0) + game.delta;
-      }
-    });
-    game.loserTeam.forEach((player) => {
-      if (player) {
-        players[player] = (players[player] || 0) - game.delta;
-      }
-    });
+  events.forEach((event) => {
+    if (Leaderboard.isGame(event)) {
+      event.winnerTeam.forEach((player) => {
+        if (player) {
+          players[player] = (players[player] || 0) + event.delta;
+        }
+      });
+      event.loserTeam.forEach((player) => {
+        if (player) {
+          players[player] = (players[player] || 0) - event.delta;
+        }
+      });
+    } else {
+      event.players.forEach((player) => {
+        if (player) {
+          players[player] = (players[player] || 0) + event.deltas[player];
+        }
+      });
+    }
   });
 
   return (

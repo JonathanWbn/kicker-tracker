@@ -9,6 +9,7 @@ import Button from "./button";
 import Card from "./card";
 import TournamentForm from "./tournament-form";
 import { DataContext } from "../data";
+import { Leaderboard } from "../domain/Leaderboard";
 
 function GameForm() {
   const { refresh, leaderboard } = useContext(DataContext);
@@ -30,7 +31,7 @@ function GameForm() {
 
   const delta =
     isComplete &&
-    leaderboard.getGameDelta(
+    Leaderboard.getGameDelta(
       { id: "", createdAt: Date.now(), winnerTeam, loserTeam },
       leaderboard.getRankedPlayers()
     );
@@ -84,7 +85,6 @@ function GameForm() {
     <TournamentForm onClose={() => setIsAddingTournament(false)} />
   ) : isAddingGame ? (
     <Card isActive>
-      <h1 className="text-xl text-center font-bold">New Game ⚽</h1>
       <div className="flex justify-between px-4 items-center border-b border-slate-500">
         <p className="text-xl ">Winner</p>
         {delta && <p className="text-lg">Δ {delta}</p>}
@@ -169,8 +169,8 @@ function GameForm() {
   ) : (
     <div className="flex mt-2">
       <Card
-        className="basis-1/2 mr-4 text-center cursor-pointer opacity-50"
-        onClick={() => window.alert("Launching November 4th.")}
+        className="basis-1/2 mr-4 text-center cursor-pointer"
+        onClick={() => setIsAddingTournament(true)}
       >
         🏆
       </Card>

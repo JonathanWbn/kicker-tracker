@@ -17,6 +17,6 @@ export const DataContext = createContext<{
     throw new Error("No player found.");
   },
   refresh: () => {},
-  leaderboard: new Leaderboard([], []),
+  leaderboard: new Leaderboard([], [], []),
   isLoading: true,
 });

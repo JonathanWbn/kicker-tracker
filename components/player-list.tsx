@@ -23,7 +23,7 @@ import { partition } from "lodash";
 function PlayerList() {
   const { leaderboard, games } = useContext(DataContext);
   const { start, date, prev, skip, cancel } = useTimeline(
-    sub(leaderboard.ratedGames[0].createdAt, { days: 1 }),
+    sub(leaderboard.events[0].createdAt, { days: 1 }),
     800,
     (date) => !leaderboard.games.some((game) => isSameDay(date, game.createdAt))
   );

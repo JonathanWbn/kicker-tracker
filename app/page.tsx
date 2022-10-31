@@ -12,6 +12,7 @@ import { Leaderboard } from "../domain/Leaderboard";
 import { Player, PlayerId } from "../domain/Player";
 import Card from "../components/card";
 import { DataContext } from "../data";
+import { Tournament } from "../domain/Tournament";
 
 const PlayerForm = dynamic(() => import("../components/player-form"), {
   suspense: true,
@@ -23,6 +24,7 @@ const PlayerList = dynamic(() => import("../components/player-list"), {
 export default function Page() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [games, setGames] = useState<Game[]>([]);
+  const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [tab, setTab] = useState<"games" | "players">("games");
 
@@ -31,14 +33,17 @@ export default function Page() {
   }, []);
 
   async function fetchData() {
-    const [{ data: players }, { data: games }] = await Promise.all([
-      axios.get<Player[]>("/api/players"),
-      axios.get<Game[]>("/api/games"),
-    ]);
+    const [{ data: players }, { data: games }, { data: tournaments }] =
+      await Promise.all([
+        axios.get<Player[]>("/api/players"),
+        axios.get<Game[]>("/api/games"),
+        axios.get<Tournament[]>("/api/tournaments"),
+      ]);
 
     setIsLoading(false);
     setPlayers(players);
     setGames(games);
+    setTournaments(tournaments);
   }
 
   function getPlayer(id: PlayerId | undefined) {
@@ -73,7 +78,7 @@ export default function Page() {
             games,
             getPlayer,
             refresh: fetchData,
-            leaderboard: new Leaderboard(players, games),
+            leaderboard: new Leaderboard(players, games, tournaments),
             isLoading,
           }}
         >

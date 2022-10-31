@@ -8,6 +8,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.3",
     "@next/font": "^13.0.0",
     "@upstash/redis": "^1.7.0",
     "axios": "^0.24.0",
