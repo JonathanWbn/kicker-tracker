@@ -94,7 +94,7 @@ function GameItem({
             <p className="text-green-400">+{delta}</p>
           </div>
           <div className="flex items-center">
-            <Team team={loserTeam} />
+            <Team team={loserTeam} isBold={false} />
             <div className="grow"></div>
             <p className="text-red-400">-{delta}</p>
           </div>
@@ -127,77 +127,30 @@ function TournamentItem({ tournament }: { tournament: TournamentWithDelta }) {
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <div className="text-2xl mr-2">🥇</div>
-              <Team team={tournament.first} />
-            </div>
-            {tournament.deltas[tournament.first[0]] < 0 ? (
-              <p className="text-red-400">
-                {tournament.deltas[tournament.first[0]]}
-              </p>
-            ) : tournament.deltas[tournament.first[0]] === 0 ? (
-              <p className="text-slate-300">0</p>
-            ) : (
-              <p className="text-green-400">
-                +{tournament.deltas[tournament.first[0]]}
-              </p>
-            )}
-          </div>
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <div className="text-2xl mr-2">🥈</div>
-              <Team team={tournament.second} />
-            </div>
-            {tournament.deltas[tournament.second[0]] < 0 ? (
-              <p className="text-red-400">
-                {tournament.deltas[tournament.second[0]]}
-              </p>
-            ) : tournament.deltas[tournament.second[0]] === 0 ? (
-              <p className="text-slate-300">0</p>
-            ) : (
-              <p className="text-green-400">
-                +{tournament.deltas[tournament.second[0]]}
-              </p>
-            )}
-          </div>
-          <div
-            className={`flex items-center justify-between ${
-              tournament.players.length > 6 ? "mb-2" : ""
-            }`}
-          >
-            <div className="flex items-center">
-              <div className="text-2xl mr-2">🥉</div>
-              <Team team={tournament.third} />
-            </div>
-            {tournament.deltas[tournament.third[0]] < 0 ? (
-              <p className="text-red-400">
-                {tournament.deltas[tournament.third[0]]}
-              </p>
-            ) : tournament.deltas[tournament.third[0]] === 0 ? (
-              <p className="text-slate-300">0</p>
-            ) : (
-              <p className="text-green-400">
-                +{tournament.deltas[tournament.third[0]]}
-              </p>
-            )}
-          </div>
-          {tournament.players.length > 6 && (
-            <div className="flex items-center justify-between">
-              <div className="text-slate-400 text-sm">
-                {tournament.players
-                  .filter(
-                    (p) =>
-                      !tournament.first.includes(p) &&
-                      !tournament.second.includes(p) &&
-                      !tournament.third.includes(p)
-                  )
-                  .map((p) => getPlayer(p).name)
-                  .join(", ")}
+          {tournament.players
+            .sort((a, b) => tournament.deltas[b] - tournament.deltas[a])
+            .map((player) => (
+              <div
+                key={player}
+                className="flex items-center justify-between mt-2 first:mt-0"
+              >
+                <div className="flex items-center">
+                  <div className="text-2xl mr-2">
+                    {tournament.first.includes(player) ? (
+                      "🥇"
+                    ) : tournament.second.includes(player) ? (
+                      "🥈"
+                    ) : tournament.third.includes(player) ? (
+                      "🥉"
+                    ) : (
+                      <div className="w-6 h-8"></div>
+                    )}
+                  </div>
+                  <Team team={[player, "placeholder"]} />
+                </div>
+                <Delta delta={tournament.deltas[player]} />
               </div>
-              <p className="text-red-400 ml-1">-{tournament.wager}</p>
-            </div>
-          )}
+            ))}
         </>
       )}
     </Card>
@@ -237,7 +190,7 @@ const Skeleton = () => (
   </>
 );
 
-const Team = ({ team }: { team: Team }) => {
+const Team = ({ team, isBold = true }: { team: Team; isBold?: boolean }) => {
   const { getPlayer } = useContext(DataContext);
 
   const [player1, player2] = team.map(getPlayer);
@@ -260,12 +213,21 @@ const Team = ({ team }: { team: Team }) => {
           />
         )}
       </div>
-      <p className="font-bold ml-2">
+      <p className={`${isBold ? "font-bold" : ""} ml-2`}>
         {player1.name}
         {player2.name ? `, ${player2.name}` : ""}
       </p>
     </>
   );
 };
+
+const Delta = ({ delta }: { delta: number }) =>
+  delta < 0 ? (
+    <p className="text-red-400">{delta}</p>
+  ) : delta === 0 ? (
+    <p className="text-slate-300">0</p>
+  ) : (
+    <p className="text-green-400">+{delta}</p>
+  );
 
 export default GameList;

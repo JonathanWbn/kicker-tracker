@@ -10,7 +10,7 @@ interface Props {
   onClose: VoidFunction;
 }
 
-const wagerOptions = [20, 30, 40, 50];
+const wagerOptions = [5, 10, 15, 20];
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -18,7 +18,7 @@ function classNames(...classes: string[]) {
 
 function TournamentForm({ onClose }: Props) {
   const { refresh, leaderboard } = useContext(DataContext);
-  const [wager, setWager] = useState(wagerOptions[1]);
+  const [wagerPercentage, setWagerPercentage] = useState(wagerOptions[1]);
   const [players, setPlayers] = useState<PlayerId[]>([]);
   const [_firstTeam, setFirstTeam] = useState<PlayerId[]>([]);
   const [_secondTeam, setSecondTeam] = useState<PlayerId[]>([]);
@@ -40,7 +40,7 @@ function TournamentForm({ onClose }: Props) {
     }
 
     await axios.post("/api/tournaments", {
-      wager,
+      wagerPercentage,
       players,
       first: firstTeam,
       second: secondTeam,
@@ -57,13 +57,13 @@ function TournamentForm({ onClose }: Props) {
   return (
     <Card isActive>
       <div className="font-bold mb-1">Wager</div>
-      <RadioGroup value={wager} onChange={setWager}>
+      <RadioGroup value={wagerPercentage} onChange={setWagerPercentage}>
         <div className="grid grid-cols-4 gap-3">
           {wagerOptions.map((wagerOption) => (
             <RadioGroup.Option
               key={wagerOption}
               value={wagerOption}
-              className={({ checked, active }) =>
+              className={({ checked }) =>
                 classNames(
                   "cursor-pointer focus:outline-none",
                   checked ? "bg-slate-500" : "bg-slate-700",
@@ -71,7 +71,7 @@ function TournamentForm({ onClose }: Props) {
                 )
               }
             >
-              <RadioGroup.Label as="span">{wagerOption}</RadioGroup.Label>
+              <RadioGroup.Label as="span">{wagerOption}%</RadioGroup.Label>
             </RadioGroup.Option>
           ))}
         </div>
@@ -100,7 +100,10 @@ function TournamentForm({ onClose }: Props) {
                 "text-white rounded-md py-2 px-2 flex items-center justify-center text-sm font-medium uppercase"
               )}
             >
-              <span>{player.name}</span>
+              <span>
+                {player.name} (
+                {Math.round(player.rating * (wagerPercentage / 100))})
+              </span>
             </div>
           ))}
       </div>

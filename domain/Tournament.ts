@@ -7,7 +7,7 @@ type Timestamp = number;
 export interface Tournament {
   id: TournamentId;
   createdAt: Timestamp;
-  wager: number;
+  wagerPercentage: number;
   players: PlayerId[];
   first: TournamentTeam;
   second: TournamentTeam;

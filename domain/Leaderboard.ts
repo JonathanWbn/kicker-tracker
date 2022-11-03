@@ -92,12 +92,16 @@ export class Leaderboard {
     tournament: Tournament,
     ratedPlayers: RatedPlayer[]
   ): RatedPlayer[] {
-    const prizepool = tournament.players.length * tournament.wager;
+    let prizepool = 0;
 
     return ratedPlayers
       .map((player) => {
         if (tournament.players.includes(player.id)) {
-          return { ...player, rating: player.rating - tournament.wager };
+          const wager = Math.round(
+            player.rating * (tournament.wagerPercentage / 100)
+          );
+          prizepool += wager;
+          return { ...player, rating: player.rating - wager };
         }
         return player;
       })

@@ -7,9 +7,9 @@ export default async function handler(
 ) {
   const repository = new UpstashTournamentRepository();
   if (req.method === "POST") {
-    const { wager, players, first, second, third } = req.body;
+    const { wagerPercentage, players, first, second, third } = req.body;
 
-    await repository.create(wager, players, first, second, third);
+    await repository.create(wagerPercentage, players, first, second, third);
 
     res.status(201).json({ success: true });
   }

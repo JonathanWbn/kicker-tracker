@@ -10,7 +10,7 @@ const TOURNAMENT_LIST_KEY = "tournaments";
 
 export class UpstashTournamentRepository {
   public async create(
-    wager: number,
+    wagerPercentage: number,
     players: PlayerId[],
     first: TournamentTeam,
     second: TournamentTeam,
@@ -19,7 +19,7 @@ export class UpstashTournamentRepository {
     const tournament: Tournament = {
       id: uuid(),
       createdAt: Date.now(),
-      wager,
+      wagerPercentage,
       players,
       first,
       second,
