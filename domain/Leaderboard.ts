@@ -4,6 +4,7 @@ import { Tournament } from "./Tournament";
 
 export interface RatedPlayer extends Player {
   rating: number;
+  isTournamentWinner: boolean;
 }
 
 export interface GameWithDelta extends Game {
@@ -26,6 +27,7 @@ export class Leaderboard {
   getRankedPlayers(date = new Date()): RatedPlayer[] {
     let ratedPlayers: RatedPlayer[] = this.players.map((player) => ({
       ...player,
+      isTournamentWinner: false,
       rating: 1500,
     }));
 
@@ -48,7 +50,7 @@ export class Leaderboard {
 
   get events(): LeaderboardEvent[] {
     const playersWithInitialRating: RatedPlayer[] = this.players.map(
-      (player) => ({ ...player, rating: 1500 })
+      (player) => ({ ...player, rating: 1500, isTournamentWinner: false })
     );
 
     const { events } = [...this.games, ...this.tournaments]
@@ -110,6 +112,7 @@ export class Leaderboard {
           return {
             ...player,
             rating: player.rating + Math.round(prizepool * 0.25),
+            isTournamentWinner: true,
           };
         }
         if (tournament.second.includes(player.id)) {

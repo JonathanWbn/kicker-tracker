@@ -197,13 +197,26 @@ function PlayerItem({
         ) : (
           <>
             <p className="mr-2 w-4 text-slate-300 text-center">{rank || "-"}</p>
-            <Image
-              src={`/animals/${player.animal}.png`}
-              alt={player.animal}
-              width={24}
-              height={24}
-              onClick={() => setIsAnimalEdit(true)}
-            />
+            {player.isTournamentWinner ? (
+              <div className="w-6 flex justify-center items-center flex-col relative">
+                <div className="absolute text-xs -right-1 -bottom-1">🥇</div>
+                <Image
+                  src={`/animals/${player.animal}.png`}
+                  alt={player.animal}
+                  width={20}
+                  height={20}
+                  onClick={() => setIsAnimalEdit(true)}
+                />
+              </div>
+            ) : (
+              <Image
+                src={`/animals/${player.animal}.png`}
+                alt={player.animal}
+                width={24}
+                height={24}
+                onClick={() => setIsAnimalEdit(true)}
+              />
+            )}
             {isNameEdit ? (
               <div className="flex grow">
                 <input
