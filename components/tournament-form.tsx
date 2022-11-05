@@ -100,10 +100,7 @@ function TournamentForm({ onClose }: Props) {
                 "text-white rounded-md py-2 px-2 flex items-center justify-center text-sm font-medium uppercase"
               )}
             >
-              <span>
-                {player.name} (
-                {Math.round(player.rating * (wagerPercentage / 100))})
-              </span>
+              <span>{player.name}</span>
             </div>
           ))}
       </div>
