@@ -100,7 +100,7 @@ function PlayerItem({
       return;
     }
     await axios.post(`/api/players/${player.id}`, {
-      ...values,
+      ...player,
       isRetired: true,
     });
     void refresh();
@@ -110,7 +110,7 @@ function PlayerItem({
 
   async function handleComeback() {
     await axios.post(`/api/players/${player.id}`, {
-      ...values,
+      ...player,
       isRetired: false,
     });
     void refresh();
