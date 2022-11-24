@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     const img = fs.readFileSync(
-      path.join(process.cwd(), "img", "bat.png"),
+      path.join(process.cwd(), "blah", "bat.svg"),
       "utf-8"
     );
 
