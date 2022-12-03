@@ -92,13 +92,7 @@ export default function Page() {
             <Suspense
               fallback={
                 <>
-                  <Card>
-                    <div className="flex justify-center mb-2">
-                      <Button backgroundColor="bg-blue-500">
-                        show history
-                      </Button>
-                    </div>
-                  </Card>
+                  <Card></Card>
                   <Card className="mt-2">
                     <p className="text-center text-lg">+</p>
                   </Card>

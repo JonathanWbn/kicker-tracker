@@ -167,7 +167,7 @@ function GameForm() {
       </div>
     </Card>
   ) : (
-    <div className="flex mt-2">
+    <div className="flex">
       <Card
         className="basis-1/2 mr-4 text-center cursor-pointer"
         onClick={() => setIsAddingTournament(true)}
