@@ -1,25 +1,21 @@
 "use client";
 
 import axios from "axios";
-import { Suspense, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-
+import { useEffect, useMemo, useState } from "react";
 import Button from "../components/button";
 import GameForm from "../components/game-form";
 import GameList from "../components/game-list";
+import PlayerForm from "../components/player-form";
+import PlayerList from "../components/player-list";
 import { Game } from "../domain/Game";
 import { Leaderboard } from "../domain/Leaderboard";
 import { Player, PlayerId } from "../domain/Player";
-import Card from "../components/card";
 import { DataContext } from "../data";
 import { Tournament } from "../domain/Tournament";
-
-const PlayerForm = dynamic(() => import("../components/player-form"), {
-  suspense: true,
-});
-const PlayerList = dynamic(() => import("../components/player-list"), {
-  suspense: true,
-});
+import { endOfDay } from "date-fns";
+import Card from "../components/card";
+import PlayerGraph from "../components/player-graph";
+import TournamentForm from "../components/tournament-form";
 
 export default function Page() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -27,6 +23,15 @@ export default function Page() {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [tab, setTab] = useState<"games" | "players">("games");
+  const [isAddingPlayer, setIsAddingPlayer] = useState(false);
+  const [isShowingGraph, setIsShowingGraph] = useState(false);
+  const [isAddingGame, setIsAddingGame] = useState(false);
+  const [isAddingTournament, setIsAddingTournament] = useState(false);
+
+  const leaderboard = useMemo(
+    () => new Leaderboard(players, games, tournaments),
+    [players, games, tournaments]
+  );
 
   useEffect(() => {
     fetchData();
@@ -53,6 +58,18 @@ export default function Page() {
     );
   }
 
+  const history = useMemo(
+    () =>
+      leaderboard.events
+        .map((event) => endOfDay(event.createdAt).getTime())
+        .filter((date, index, array) => array.indexOf(date) === index)
+        .map((date) => ({
+          date,
+          rankings: leaderboard.getRankedPlayers(new Date(date)),
+        })),
+    [leaderboard]
+  );
+
   return (
     <div className="bg-slate-800 px-5 pb-5 text-slate-200 min-h-screen">
       <div className="w-full max-w-3xl m-auto">
@@ -78,30 +95,60 @@ export default function Page() {
             games,
             getPlayer,
             refresh: fetchData,
-            leaderboard: new Leaderboard(players, games, tournaments),
+            leaderboard,
+            history,
             isLoading,
           }}
         >
           {tab === "games" && (
             <>
-              <GameForm />
+              {isAddingGame ? (
+                <GameForm onClose={() => setIsAddingGame(false)} />
+              ) : isAddingTournament ? (
+                <TournamentForm onClose={() => setIsAddingTournament(false)} />
+              ) : (
+                <div className="flex">
+                  <Card
+                    className="basis-1/2 mr-4 text-center cursor-pointer"
+                    onClick={() => setIsAddingTournament(true)}
+                  >
+                    🏆
+                  </Card>
+                  <Card
+                    onClick={() => setIsAddingGame(true)}
+                    className="basis-1/2 text-center cursor-pointer"
+                  >
+                    ⚽
+                  </Card>
+                </div>
+              )}
               <GameList />
             </>
           )}
           {tab === "players" && (
-            <Suspense
-              fallback={
-                <>
-                  <Card></Card>
-                  <Card className="mt-2">
-                    <p className="text-center text-lg">+</p>
+            <>
+              {isShowingGraph ? (
+                <PlayerGraph onClose={() => setIsShowingGraph(false)} />
+              ) : isAddingPlayer ? (
+                <PlayerForm onClose={() => setIsAddingPlayer(false)} />
+              ) : (
+                <div className="flex mb-4">
+                  <Card
+                    className="basis-1/2 mr-4 text-center cursor-pointer"
+                    onClick={() => setIsAddingPlayer(true)}
+                  >
+                    🆕
                   </Card>
-                </>
-              }
-            >
+                  <Card
+                    onClick={() => setIsShowingGraph(true)}
+                    className="basis-1/2 text-center cursor-pointer"
+                  >
+                    📊
+                  </Card>
+                </div>
+              )}
               <PlayerList />
-              <PlayerForm />
-            </Suspense>
+            </>
           )}
         </DataContext.Provider>
 

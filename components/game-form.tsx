@@ -1,20 +1,16 @@
 import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
-
 import { Team } from "../domain/Game";
 import Image from "next/image";
 import { PlayerId } from "../domain/Player";
 import { uniq } from "lodash";
 import Button from "./button";
 import Card from "./card";
-import TournamentForm from "./tournament-form";
 import { DataContext } from "../data";
 import { Leaderboard } from "../domain/Leaderboard";
 
-function GameForm() {
+function GameForm({ onClose }: { onClose: () => void }) {
   const { refresh, leaderboard } = useContext(DataContext);
-  const [isAddingGame, setIsAddingGame] = useState(false);
-  const [isAddingTournament, setIsAddingTournament] = useState(false);
   const [winnerTeam, setWinnerTeam] = useState<Team>(["", ""]);
   const [loserTeam, setLoserTeam] = useState<Team>(["", ""]);
 
@@ -48,7 +44,7 @@ function GameForm() {
     void refresh();
     setLoserTeam(["", ""]);
     setWinnerTeam(["", ""]);
-    setIsAddingGame(false);
+    onClose();
   }
 
   function handleWinnerSelect(playerId: PlayerId) {
@@ -81,9 +77,7 @@ function GameForm() {
     }
   }
 
-  return isAddingTournament ? (
-    <TournamentForm onClose={() => setIsAddingTournament(false)} />
-  ) : isAddingGame ? (
+  return (
     <Card isActive>
       <div className="flex justify-between px-4 items-center border-b border-slate-500">
         <p className="text-xl ">Winner</p>
@@ -147,11 +141,7 @@ function GameForm() {
       </div>
       <div className="flex justify-around mt-4">
         <Button
-          onClick={() => {
-            setIsAddingGame(false);
-            setWinnerTeam(["", ""]);
-            setLoserTeam(["", ""]);
-          }}
+          onClick={onClose}
           textSize="text-base"
           backgroundColor="bg-slate-700"
         >
@@ -166,21 +156,6 @@ function GameForm() {
         </Button>
       </div>
     </Card>
-  ) : (
-    <div className="flex">
-      <Card
-        className="basis-1/2 mr-4 text-center cursor-pointer"
-        onClick={() => setIsAddingTournament(true)}
-      >
-        🏆
-      </Card>
-      <Card
-        onClick={() => setIsAddingGame(true)}
-        className="basis-1/2 text-center cursor-pointer"
-      >
-        ⚽
-      </Card>
-    </div>
   );
 }
 

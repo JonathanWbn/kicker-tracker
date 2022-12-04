@@ -2,7 +2,6 @@ import axios from "axios";
 import Image from "next/image";
 import { useContext, useState, Fragment } from "react";
 import { format, sub } from "date-fns";
-
 import { DataContext } from "../data";
 import Button from "./button";
 import Card from "./card";
@@ -105,7 +104,7 @@ function GameItem({
 }
 
 function TournamentItem({ tournament }: { tournament: TournamentWithDelta }) {
-  const { getPlayer, refresh } = useContext(DataContext);
+  const { refresh } = useContext(DataContext);
   const [isDeletion, setIsDeletion] = useState(false);
 
   async function handleDelete() {

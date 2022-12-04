@@ -1,7 +1,13 @@
 import { createContext } from "react";
 import { Game } from "./domain/Game";
-import { Leaderboard } from "./domain/Leaderboard";
+import { Leaderboard, RatedPlayer } from "./domain/Leaderboard";
 import { Player, PlayerId } from "./domain/Player";
+
+interface GameDay {
+  date: number;
+  rankings: RatedPlayer[];
+}
+type History = Array<GameDay>;
 
 export const DataContext = createContext<{
   players: Player[];
@@ -9,6 +15,7 @@ export const DataContext = createContext<{
   getPlayer: (id: PlayerId | undefined) => Player;
   refresh: VoidFunction;
   leaderboard: Leaderboard;
+  history: History;
   isLoading: boolean;
 }>({
   players: [],
@@ -18,5 +25,6 @@ export const DataContext = createContext<{
   },
   refresh: () => {},
   leaderboard: new Leaderboard([], [], []),
+  history: [],
   isLoading: true,
 });

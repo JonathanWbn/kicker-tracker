@@ -1,7 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import { RatedPlayer } from "../domain/Leaderboard";
 import Image from "next/image";
-
 import { DataContext } from "../data";
 import axios from "axios";
 import { animals } from "../domain/Player";
@@ -10,7 +9,7 @@ import Card from "./card";
 import { partition } from "lodash";
 
 function PlayerList() {
-  const { leaderboard, games } = useContext(DataContext);
+  const { leaderboard } = useContext(DataContext);
 
   const rankedPlayers = leaderboard.getRankedPlayers();
   const [activePlayers, retiredPlayers] = partition(
