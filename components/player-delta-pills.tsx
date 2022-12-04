@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useContext } from "react";
-import { Leaderboard, LeaderboardEvent } from "../domain/Leaderboard";
 import { DataContext } from "../data";
+import { Leaderboard, LeaderboardEvent } from "../domain/Leaderboard";
 import Pill from "./pill";
 
 export const PlayerDeltaPills = ({

@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+
 import { UpstashTournamentRepository } from "../../../repository/UpstashTournamentRepository";
 
 export default async function handler(

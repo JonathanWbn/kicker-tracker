@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
-import { RatedPlayer } from "../domain/Leaderboard";
-import Image from "next/image";
-import { DataContext } from "../data";
 import axios from "axios";
+import { partition } from "lodash";
+import Image from "next/image";
+import React, { useContext, useState } from "react";
+import { DataContext } from "../data";
+import { RatedPlayer } from "../domain/Leaderboard";
 import { animals } from "../domain/Player";
 import Button from "./button";
 import Card from "./card";
-import { partition } from "lodash";
 
 function PlayerList() {
   const { leaderboard } = useContext(DataContext);

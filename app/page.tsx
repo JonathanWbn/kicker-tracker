@@ -1,21 +1,21 @@
 "use client";
 
 import axios from "axios";
+import { endOfDay } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import Button from "../components/button";
+import Card from "../components/card";
 import GameForm from "../components/game-form";
 import GameList from "../components/game-list";
 import PlayerForm from "../components/player-form";
+import PlayerGraph from "../components/player-graph";
 import PlayerList from "../components/player-list";
+import TournamentForm from "../components/tournament-form";
+import { DataContext } from "../data";
 import { Game } from "../domain/Game";
 import { Leaderboard } from "../domain/Leaderboard";
 import { Player, PlayerId } from "../domain/Player";
-import { DataContext } from "../data";
 import { Tournament } from "../domain/Tournament";
-import { endOfDay } from "date-fns";
-import Card from "../components/card";
-import PlayerGraph from "../components/player-graph";
-import TournamentForm from "../components/tournament-form";
 
 export default function Page() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -137,7 +137,7 @@ export default function Page() {
                     className="basis-1/2 mr-4 text-center cursor-pointer"
                     onClick={() => setIsAddingPlayer(true)}
                   >
-                    🆕
+                    👤
                   </Card>
                   <Card
                     onClick={() => setIsShowingGraph(true)}

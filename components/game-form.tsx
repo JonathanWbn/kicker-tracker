@@ -1,13 +1,13 @@
-import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
-import { Team } from "../domain/Game";
-import Image from "next/image";
-import { PlayerId } from "../domain/Player";
 import { uniq } from "lodash";
+import Image from "next/image";
+import { MouseEvent, useContext, useState } from "react";
+import { DataContext } from "../data";
+import { Team } from "../domain/Game";
+import { Leaderboard } from "../domain/Leaderboard";
+import { PlayerId } from "../domain/Player";
 import Button from "./button";
 import Card from "./card";
-import { DataContext } from "../data";
-import { Leaderboard } from "../domain/Leaderboard";
 
 function GameForm({ onClose }: { onClose: () => void }) {
   const { refresh, leaderboard } = useContext(DataContext);

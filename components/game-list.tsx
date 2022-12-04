@@ -1,21 +1,21 @@
 import axios from "axios";
-import Image from "next/image";
-import { useContext, useState, Fragment } from "react";
 import { format, sub } from "date-fns";
+import Image from "next/image";
+import { Fragment, useContext, useState } from "react";
 import { DataContext } from "../data";
-import Button from "./button";
-import Card from "./card";
+import { Team } from "../domain/Game";
 import {
+  GameWithDelta,
   Leaderboard,
   LeaderboardEvent,
-  GameWithDelta,
   TournamentWithDelta,
 } from "../domain/Leaderboard";
+import Button from "./button";
+import Card from "./card";
 import {
   PlayerDeltaPills,
   PlayerDeltaPillsSkeleton,
 } from "./player-delta-pills";
-import { Team } from "../domain/Game";
 
 function GameList() {
   const { leaderboard, isLoading } = useContext(DataContext);

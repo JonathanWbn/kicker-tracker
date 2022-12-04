@@ -1,18 +1,17 @@
-import React, { useContext, useState } from "react";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Tooltip,
 } from "chart.js";
+import { format } from "date-fns";
+import React, { useContext, useState } from "react";
 import { ChartProps, Line } from "react-chartjs-2";
-
 import { DataContext } from "../data";
 import { RatedPlayer } from "../domain/Leaderboard";
 import Card from "./card";
-import { format } from "date-fns";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -143,8 +142,8 @@ function PlayerGraph({ onClose }: { onClose: () => void }) {
         </button>
       </div>
       <Line options={options} data={data} />
-      <div className="grid grid-cols-7 gap-1">
-        <div className="col-span-3"></div>
+      <div className="grid grid-cols-4 sm:grid-cols-7 gap-1">
+        <div className="hidden sm:block col-span-3"></div>
         {presetButtons.map(({ label, onClick, active }) => (
           <div
             key={label}

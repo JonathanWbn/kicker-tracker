@@ -1,9 +1,9 @@
-import { MouseEvent, useContext, useState } from "react";
 import axios from "axios";
+import { upperFirst } from "lodash";
+import Image from "next/image";
+import { MouseEvent, useContext, useState } from "react";
 import { DataContext } from "../data";
 import { animals, PlayerAnimal } from "../domain/Player";
-import Image from "next/image";
-import { upperFirst } from "lodash";
 import Button from "./button";
 import Card from "./card";
 

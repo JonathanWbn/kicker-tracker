@@ -1,10 +1,10 @@
-import React, { MouseEvent, useContext, useState } from "react";
-import Button from "./button";
-import Card from "./card";
 import { RadioGroup } from "@headlessui/react";
+import axios from "axios";
+import React, { MouseEvent, useContext, useState } from "react";
 import { DataContext } from "../data";
 import { PlayerId } from "../domain/Player";
-import axios from "axios";
+import Button from "./button";
+import Card from "./card";
 
 interface Props {
   onClose: VoidFunction;
